@@ -28,11 +28,11 @@ will give
 
 The information content $IC(\cdot)$ (i.e. the "letter height") of the $i$-th column $c_i$ in a position weight matrix (PWM) is 
 
-```math
+$$
 IC(c_i) = \sum_{\alpha}\,f_{\alpha i}\,\log_2 \frac{f_{\alpha i}}{\beta_\alpha}
-```
+$$
 
-where $f_{\alpha i}$ the frequency of nucleotide $\alpha\in\{A,C,G,T\}$ at the $i$-th column of a PWM. The $4$-dimensional vector $\beta$ is the assumed genomic background
+where $f_{\alpha i}$ the frequency of nucleotide $\alpha\in {A,C,G,T}$ at the $i$-th column of a PWM. The $4$-dimensional vector $\beta$ is the assumed genomic background
 
 By default, the background $\beta$ is assumed to be flat, i.e. $\beta=(0.25, 0.25,0.25,0.25)$.
 
