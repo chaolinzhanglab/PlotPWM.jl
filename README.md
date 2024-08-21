@@ -42,11 +42,11 @@ where
 - $\beta_\alpha$ denotes the genomic background frequency of nucleotide $\alpha$.
 
 ### Default genomic background
-By default, the background model assumes a uniform distribution of nucleotides, with each nucleotide having a frequency of $\beta=(0.25, 0.25,0.25,0.25)$. I In this case, the information content $IC(c_i)$ simplifies to:
+By default, the background model assumes a uniform distribution of nucleotides, with each nucleotide having a frequency of $\beta=(0.25, 0.25,0.25,0.25)$. In this case, the information content $IC(c_i)$ simplifies to:
 
 $$IC(c_i)=2+\sum_{\alpha}f_{\alpha i}\log_2 f_{\alpha i}$$
 
-This formula illustrates why the y-axis of the plot ranges from  0 to 2.
+This formula illustrates why the y-axis of the plot ranges from  $0$ to $2$.
 
 ## Acknowledgement
 This code repo modifies the code using the awesome work from https://github.com/BenjaminDoran/LogoPlots.jl.
