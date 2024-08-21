@@ -40,23 +40,32 @@ end
                    dna=true, 
                    xaxis=false,
                    yaxis=false,
-                   thickness_scaling=0.05,
+                   thickness_scaling=0.0525,
                    logo_x_offset=0.0,
                    logo_y_offset=0.0,
-                   margin=200Plots.mm,
+                   ytickfontsize=265,
+                   margin=275Plots.mm,
+                   dpi=300,
                    beta=1.0)
     num_cols = size(data.args[1], 2)
     width_factor = exp(-0.65*num_cols+7)+25
     logo_size = (width_factor*num_cols, 220)
     ylims --> (0, 2)
+    xlims --> (-0.5, num_cols+1)
     framestyle --> :zerolines
+    dpi --> dpi
+
+    ticks --> :native
     yticks --> 0:1:2  # Ensure ticks are generated
     ytickfontcolor --> :gray
+    ytick_direction --> :out
+    ytickfontsize --> ytickfontsize
+    yminorticks --> 25
+    ytickfont --> font(45, "Helvetica")
+
     xtickfontcolor --> :gray
     xticks --> 1:1:num_cols
-    ytickfontsize --> 185
     xtickfontsize --> 145
-    ytickfont --> font(36, "Helvetica")
     xaxis && (xaxis --> xaxis)
     yaxis && (yaxis --> yaxis)
     legend --> false
@@ -79,4 +88,26 @@ end
             v.xs, v.ys
         end
     end
+end
+
+"""
+    save_logoplot(pfm, save_name; dpi=65)
+
+# Arguments
+- `pfm::Matrix{Real}`: Position frequency matrix
+- `save_name::String`: Name of the path/file to save the plot
+
+# Example
+```julia
+#= save the logo plot in the tmp folder as logo.png =#
+save_logoplot(pfm, "tmp/logo.png")
+
+#= save the logo plot in the current folder as logo.png with a dpi of 65 =#
+save_logoplot(pfm, "logo.png"; dpi=65)
+
+```
+"""
+function save_logoplot(pfm, save_name; dpi=65)
+    p = logoplot(pfm; dpi=dpi)
+    savefig(p, save_name)
 end
