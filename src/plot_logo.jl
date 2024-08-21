@@ -43,7 +43,7 @@ end
                    thickness_scaling=0.05,
                    logo_x_offset=0.0,
                    logo_y_offset=0.0,
-                   margin=275Plots.mm,
+                   margin=200Plots.mm,
                    beta=1.0)
     num_cols = size(data.args[1], 2)
     width_factor = exp(-0.65*num_cols+7)+25
@@ -63,7 +63,7 @@ end
     tickdir --> :out
     grid --> false
     dtick--> 10
-    margin --> 275Plots.mm
+    margin --> margin
     thickness_scaling --> thickness_scaling
     size --> logo_size
     pfm = data.args[1]
