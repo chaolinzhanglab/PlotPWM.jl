@@ -24,17 +24,24 @@ will give
 
 ![pfm](demo/demo.png)
 
+The function `logoplot(pfm)` produces a plot where:
+- The x-axis shows the positions in the PWM. 
+- The y-axis shows the information content (bits) for each position.
+
 # Note
 
-### Default genomic background
-The information content $IC(\cdot)$ (i.e. the "letter height") of the $i$-th column $c_i$ in a position weight matrix (PWM) is 
+### Definition of Information Content in Position Weight Matrices (PWM)
+In a position weight matrix (PWM), the <b>information content</b> $IC(\cdot)$ (i.e. the "letter height") of the $i$-th column $c_i$ in a position weight matrix (PWM) is 
 
 $$
 IC(c_i) = \sum_{\alpha}f_{\alpha i}\log_2 \frac{f_{\alpha i}}{\beta_\alpha}
 $$
 
-where $f_{\alpha i}$ the frequency of nucleotide $\alpha\in\Set{A,C,G,T}$ at the $i$-th column of a PWM. The $4$-dimensional vector $\beta$ is the assumed genomic background
+where 
+- $f_{\alpha i}$ the frequency of nucleotide $\alpha\in\Set{A,C,G,T}$ at the $i$-th column of a PWM. 
+- $\beta_\alpha$ denotes the genomic background frequency of nucleotide $\alpha$.
 
-By default, the background $\beta$ is assumed to be flat, i.e. $\beta=(0.25, 0.25,0.25,0.25)$.
+### Default genomic background
+By default, the background model assumes a uniform distribution of nucleotides, with each nucleotide having a frequency of: $$\beta=(0.25, 0.25,0.25,0.25)$$
 
 
