@@ -42,6 +42,7 @@ where
 - $\beta_\alpha$ denotes the genomic background frequency of nucleotide $\alpha$.
 
 ### Default genomic background
-By default, the background model assumes a uniform distribution of nucleotides, with each nucleotide having a frequency of: $$\beta=(0.25, 0.25,0.25,0.25)$$
+By default, the background model assumes a uniform distribution of nucleotides, with each nucleotide having a frequency of: 
+$$\beta=(0.25, 0.25,0.25,0.25)$$
 
 
