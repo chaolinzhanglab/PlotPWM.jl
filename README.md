@@ -31,7 +31,7 @@ The function `logoplot(pfm)` produces a plot where:
 # Note
 
 ### Definition of Information Content in Position Weight Matrices (PWM)
-In a position weight matrix (PWM), the <b>information content</b> $IC(\cdot)$ (i.e. the "letter height") of the $i$-th column $c_i$ in a position weight matrix (PWM) is 
+In a position weight matrix (PWM), the "letter height", or more formally, the <b>information content</b> $IC(\cdot)$  of the $i$-th column $c_i$, quantifies how conserved the nucleotides are at that position compared to a background model. It is calculated using the formula:
 
 $$
 IC(c_i) = \sum_{\alpha}f_{\alpha i}\log_2 \frac{f_{\alpha i}}{\beta_\alpha}
