@@ -6,6 +6,10 @@
 [![Coverage](https://codecov.io/gh/kchu25/PlotPWM.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/kchu25/PlotPWM.jl)
 
 
+# What is this?
+
+PlotPWM is a package for plotting [position weight matrices (PWMs)](https://en.wikipedia.org/wiki/Position_weight_matrix), typically used to characterize motifs, i.e., the binding sites of proteins that interact with DNA or RNA.
+
 # Usage
 
 ## Plotting your typical PWMs
