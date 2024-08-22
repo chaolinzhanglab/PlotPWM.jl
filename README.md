@@ -31,20 +31,20 @@ The function `logoplot(pfm)` produces a plot where:
 
 ## Plotting your PWMs with crosslinking tendencies
 
-The cross-linked PWMs takes in not just a PWM but also showing its crosslinking tendencies.
+The cross-linked PWMs not only display the PWM but also account for crosslinking tendencies.
 
-In addition to the PFM, you'd also need to estimate the crosslinking tendencies. Given a PFM of $L$ columns, you need to provide a $K\times L$ matrix $C$ where $\sum_{k,\ell}C_{k\ell}=1$.
+To do this, you’ll need to estimate these tendencies alongside the PFM. For a PFM with $L$ columns, you'll provide a $K\times L$ matrix $C$, where $\sum_{k,\ell}C_{k\ell}=1$.
 
-E.g. In the case where $K=1$:
+For example, when $K=1$:
 ```
 C = [0.01  0.04  0.05  0.0  0.74  0.05  0.03  0.05  0.03  0.0] 
 ```
-You can then plot the crosslinked PWM using
+You can then plot the cross-linked PWM using:
 
 ```
 logoplotwithcrosslink(pfm, c)
 ```
-which will give
+This will generate:
 
 ![pfm](demo/demo2.png)
 
