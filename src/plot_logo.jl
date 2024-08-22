@@ -34,6 +34,10 @@ function freq2xy(pfm;
     all_coords
 end
 
+
+width_factor(num_cols) = exp(-0.65*num_cols+7)+25
+
+
 @userplot LogoPlot
 @recipe function f(data::LogoPlot; 
                    background = [0.25 for _ = 1:4],

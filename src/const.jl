@@ -6,6 +6,8 @@ rectangle(x, y, w, h) = (; x = (x .+ [0, w, w, 0]), y = (y .+ [0, 0, h, h]))
 const BASIC_RECT = rectangle(0.2, 0.0, 0.6, 1.0)
 const C_RECT = rectangle(0.2, 0.0, 0.1, 1.0)
 
+const crosslink_stretch_factor = 2.0
+
 # stolen from https://github.com/heike/gglogo/blob/master/data/alphabet.rda + added "*" char
 # to add more chars add "<my char>" => (; x=<xcoords>, y=<ycoords>) 
 # XY coords should be vertices of a closed polygon in the unit square. 
