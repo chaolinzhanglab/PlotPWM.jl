@@ -8,10 +8,11 @@
 
 # Usage
 
+## Plotting your typical PWMs
 ```
 using PlotPWM
 
-# Given a position frequency matrix (each column sum to 1)
+# Given a position frequency matrix (each column sums to 1)
 
 pfm =  [0.01  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
         0.98  0.0  0.01  0.19  0.0   0.96  0.01  0.89  0.03  0.0
@@ -27,6 +28,27 @@ will give
 The function `logoplot(pfm)` produces a plot where:
 - The x-axis shows the positions in the PWM. 
 - The y-axis shows the information content (bits) for each position.
+
+## Plotting your PWMs with crosslinking tendencies
+
+The cross-linked PWMs takes in not just a PWM but also showing its crosslinking tendencies.
+
+In addition to the PFM, you'd also need to estimate the crosslinking tendencies. Given a PFM of $L$ columns, you need to provide a $K\times L$ matrix $C$ where $\sum_{k,\ell}C_{k\ell}=1$.
+
+E.g. In the case where $K=1$:
+```
+C = [0.01  0.04  0.05  0.0  0.74  0.05  0.03  0.05  0.03  0.0] 
+```
+You can then plot the crosslinked PWM using
+
+```
+logoplotwithcrosslink(pfm, c)
+```
+which will give
+
+![pfm](demo/demo2.png)
+
+
 
 # Note
 

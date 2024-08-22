@@ -106,3 +106,10 @@ end
         end
     end
 end
+
+
+function save_crosslinked_logoplot(pfm, c, save_name; dpi=65)
+    p = logoplotwithcrosslink(pfm, c; dpi=dpi)
+    savefig(p, save_name)
+end
+
