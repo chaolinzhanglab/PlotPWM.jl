@@ -11,4 +11,4 @@ By default, the background model assumes a uniform distribution of nucleotides, 
 
 $$IC(c_i)=2+\sum_{\alpha}f_{\alpha i}\log_2 f_{\alpha i}$$
 
-This formula illustrates why the y-axis of the plot ranges from  $0$ to $2$.
+This formula illustrates why the y-axis of the logo-plot ranges from  $0$ to $2$.
