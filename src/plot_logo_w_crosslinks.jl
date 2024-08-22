@@ -22,7 +22,7 @@ end
 
 function freq2xyWcrosslink(pfm, crosslink_mat; 
                  background=[0.25 for _ = 1:4],
-                 dna=true, 
+                 rna=true, 
                  beta=1.0, # width of the x-axis for each letter in the motif
                  logo_x_offset = 0.0,
                  logo_y_offset = 0.0, 
@@ -30,7 +30,7 @@ function freq2xyWcrosslink(pfm, crosslink_mat;
                  very_small_perturb = 1e-5 .* rand(4))
     # @assert sum(pfm, dims=1) .≈ 1 "pfm must be a probability matrix"
     all_coords = []
-    charnames = dna ? dna_letters : rna_letters
+    charnames = rna ? rna_letters : dna_letters
     # for each character (row) collect all positions and heights of that character's polygon
     for (j, c) in enumerate(charnames)
         xs, ys = Float64[], Float64[]
@@ -59,7 +59,7 @@ end
 @userplot LogoPlotWithCrosslink
 @recipe function f(data::LogoPlotWithCrosslink; 
                    background = [0.25 for _ = 1:4],
-                   dna=true, 
+                   rna=true, 
                    xaxis=false,
                    yaxis=false,
                    left_margin=155Plots.mm,
@@ -93,7 +93,7 @@ end
     pfm = data.args[1]
     crosslink_mat = data.args[2]
     coords = freq2xyWcrosslink(pfm, crosslink_mat;
-                     background=background, dna=dna, beta=beta,
+                     background=background, rna=rna, beta=beta,
                      logo_x_offset=logo_x_offset,
                      logo_y_offset=logo_y_offset);
     for (k, v) in coords
@@ -108,8 +108,8 @@ end
 end
 
 
-function save_crosslinked_logoplot(pfm, c, save_name; dpi=65)
-    p = logoplotwithcrosslink(pfm, c; dpi=dpi)
+function save_crosslinked_logoplot(pfm, c, save_name; dpi=65, rna=true)
+    p = logoplotwithcrosslink(pfm, c; dpi=dpi, rna=rna)
     savefig(p, save_name)
 end
 

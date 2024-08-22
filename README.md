@@ -31,9 +31,9 @@ The function `logoplot(pfm)` produces a plot where:
 
 ## Plotting your PWMs with crosslinking tendencies
 
-The cross-linked PWMs not only display the PWM but also account for crosslinking tendencies.
+The cross-linked PWMs not only display the PWM but also account for crosslinking tendencies, which is typically done for RNA-binding proteins (RBPs).
 
-To do this, you’ll need to estimate these tendencies alongside the PFM. For a PFM with $L$ columns, you'll provide a $K\times L$ matrix $C$, where $\sum_{k,\ell}C_{k\ell}=1$.
+To achieve this, you'll need to estimate these tendencies alongside the PFM. For a PFM with $L$ columns, you'll provide a $K \times L$ matrix $C$, where $\sum_{k,\ell}C_{k\ell} = 1$.
 
 For example, when $K=1$:
 ```
@@ -42,7 +42,7 @@ C = [0.01  0.04  0.05  0.0  0.74  0.05  0.03  0.05  0.03  0.0]
 You can then plot the cross-linked PWM using:
 
 ```
-logoplotwithcrosslink(pfm, c)
+logoplotwithcrosslink(pfm, c; rna=true)
 ```
 This will generate:
 
