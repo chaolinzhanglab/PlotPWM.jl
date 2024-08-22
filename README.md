@@ -46,11 +46,30 @@ C = [0.01  0.04  0.05  0.0  0.74  0.05  0.03  0.05  0.03  0.0]
 You can then plot the cross-linked PWM using:
 
 ```
-logoplotwithcrosslink(pfm, c; rna=true)
+logoplotwithcrosslink(pfm, C; rna=true)
 ```
 This will generate:
 
 ![pfm](demo/demo2.png)
+
+### Multiplexed crosslinking tendencies
+
+Multiplexed crosslinking tendencies refer to situations where multiple crosslinking signatures are present in the dataset. These different crosslinking signatures can be applied to each sequence before motif discovery tasks. This corresponds to cases where the crosslink matrix $C$ has more than one row, i.e., $K > 1$.
+
+Suppose we have 
+```
+C2 = [0.01  0.02  0.03  0.0   0.37  0.03  0.02  0.03  0.02  0.0
+      0.03  0.0   0.11  0.04  0.26  0.0   0.03  0.01  0.02  0.02]
+```
+Now, using
+```
+logoplotwithcrosslink(pfm, C2; rna=true)
+```
+You'd get 
+
+![pfm](demo/demo3.png)
+
+Here, different colors indicate different crosslinking signatures and their height is proportional to the crosslinking tendency at each position in the PWM.
 
 
 
@@ -75,4 +94,4 @@ $$IC(c_i)=2+\sum_{\alpha}f_{\alpha i}\log_2 f_{\alpha i}$$
 This formula illustrates why the y-axis of the plot ranges from  $0$ to $2$.
 
 ## Acknowledgement
-This code repo modifies the code using the awesome work from https://github.com/BenjaminDoran/LogoPlots.jl.
+This code repo modifies the code using the work from https://github.com/BenjaminDoran/LogoPlots.jl.
