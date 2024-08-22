@@ -37,7 +37,7 @@ The function `logoplot(pfm)` produces a plot where:
 
 The cross-linked PWMs not only display the PWM but also account for crosslinking tendencies, which is typically done for RNA-binding proteins (RBPs).
 
-To achieve this, you'll need to estimate these tendencies alongside the PFM. For a PFM with $L$ columns, you'll provide a $K \times L$ matrix $C$, where $\sum_{k,\ell}C_{k\ell} = 1$.
+To achieve this, you'll need to estimate these tendencies alongside the PFM. For a PFM with $L$ columns, you'll provide a $K \times L$ matrix $C$, where $\sum_{k,\ell}C_{k\ell} \leq 1$.
 
 For example, when $K=1$:
 ```
@@ -56,7 +56,7 @@ This will generate:
 
 # Note
 
-### Definition of Information Content in Position Weight Matrices (PWM)
+### Definition of Information Content in PWMs
 In a position weight matrix (PWM), the "letter height", or more formally, the <b>information content</b> $IC(\cdot)$  of the $i$-th column $c_i$, quantifies how conserved the nucleotides are at that position compared to a background model. It is calculated using the formula:
 
 $$
