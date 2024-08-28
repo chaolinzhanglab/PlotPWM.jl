@@ -13,14 +13,14 @@ PlotPWM is a package for plotting [position weight matrices (PWMs)](https://en.w
 ## Table of contents
 
 * [Usage](#Usage)  
-   - [Plot-your-typical-PWMs](#Plot-your-typical-PWMs)
-      - [Save-the-PWM](#Save-the-PWM)
+   - [Plot your typical PWMs](#Plot-your-typical-PWMs)
+      - [Save the PWM](#Save-the-PWM)
    - [Plot your PWMs with crosslinking tendencies](#Plot-your-PWMs-with-crosslinking-tendencies)
 * [Some-definitions](#Some-definitions)
 
 # Usage
 
-## Plot-your-typical-PWMs
+## Plot your typical PWMs
 ```
 using PlotPWM
 
@@ -53,7 +53,7 @@ logoplot(pfm)
 ```
 to get identical results as above, where background is set to be `[0.25, 0.25, 0.25, 0.25]` by default.
 
-### Save-the-PWM
+### Save the PWM
 You can call `save_logoplot(pfm, background, save_name)` to save your result. For example:
 ```
 save_logoplot(pfm, background, "tmp/logo.png")
