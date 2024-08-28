@@ -1,13 +1,13 @@
-# PlotPWM
+# SeqLogo
 
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://kchu25.github.io/PlotPWM.jl/dev/)
-[![Build Status](https://github.com/kchu25/PlotPWM.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/kchu25/PlotPWM.jl/actions/workflows/CI.yml?query=branch%3Amain)
-[![Coverage](https://codecov.io/gh/kchu25/PlotPWM.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/kchu25/PlotPWM.jl)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://kchu25.github.io/SeqLogo.jl/dev/)
+[![Build Status](https://github.com/kchu25/SeqLogo.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/kchu25/SeqLogo.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Coverage](https://codecov.io/gh/kchu25/SeqLogo.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/kchu25/SeqLogo.jl)
 
 
 # What is this?
 
-PlotPWM is a package for plotting [position weight matrices (PWMs)](https://en.wikipedia.org/wiki/Position_weight_matrix),  which is commonly used to characterize and visualize motifs — the binding sites where proteins interact with DNA or RNA.
+SeqLogo is a package for plotting [position weight matrices (PWMs)](https://en.wikipedia.org/wiki/Position_weight_matrix),  which is commonly used to characterize and visualize motifs — the binding sites where proteins interact with DNA or RNA.
 
 ## Table of contents
 
@@ -22,7 +22,7 @@ PlotPWM is a package for plotting [position weight matrices (PWMs)](https://en.w
 
 ## Plot your typical PWMs
 ```
-using PlotPWM
+using SeqLogo
 
 # Given a position frequency matrix (PFM), where each column sums to 1
 

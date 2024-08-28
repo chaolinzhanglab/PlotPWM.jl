@@ -1,14 +1,14 @@
-using PlotPWM
+using SeqLogo
 using Documenter
 
-DocMeta.setdocmeta!(PlotPWM, :DocTestSetup, :(using PlotPWM); recursive=true)
+DocMeta.setdocmeta!(SeqLogo, :DocTestSetup, :(using SeqLogo); recursive=true)
 
 makedocs(;
-    modules=[PlotPWM],
+    modules=[SeqLogo],
     authors="Shane Kuei-Hsien Chu (skchu@wustl.edu)",
-    sitename="PlotPWM.jl",
+    sitename="SeqLogo.jl",
     format=Documenter.HTML(;
-        canonical="https://kchu25.github.io/PlotPWM.jl",
+        canonical="https://kchu25.github.io/SeqLogo.jl",
         edit_link="main",
         assets=String[],
     ),
@@ -19,6 +19,6 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/kchu25/PlotPWM.jl",
+    repo="github.com/kchu25/SeqLogo.jl",
     devbranch="main",
 )
