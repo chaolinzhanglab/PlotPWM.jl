@@ -44,24 +44,24 @@ will give
 
 ![pfm](demo/demo.png)
 
-The function `logoplot(pfm)` produces a plot where:
+The function `logoplot(pfm, background)` produces a plot where:
 - The x-axis shows the positions in the PWM. 
 - The y-axis shows the information content (bits) for each position.
 
-Here, `background` is an array representing the background probabilities for A, C, G, and T. These should sum to 1. In this case, a uniform background of `[0.25, 0.25, 0.25, 0.25]` is used, assuming equal probabilities for each base.
+The `background` is an array representing the background probabilities for A, C, G, and T. These should sum to 1. In this example, a uniform background of `[0.25, 0.25, 0.25, 0.25]` is used, assuming equal probabilities for each base.
 
-You can also simply call 
+You can also call:
 ```
 logoplot(pfm)
 ```
-to get identical results as above, where background is set to be `[0.25, 0.25, 0.25, 0.25]` by default.
+to get the same results as above, where the background is set to `[0.25, 0.25, 0.25, 0.25]` by default.
 
 ### Save the PWMs
-You can call `save_logoplot(pfm, background, save_name)` to save your result. For example:
+To save your plot, use `save_logoplot(pfm, background, save_name)`. For example:
 ```
 save_logoplot(pfm, background, "tmp/logo.png")
 ```
-Or simply
+Or simply:
 ```
 save_logoplot(pfm, "tmp/logo.png")
 ```
