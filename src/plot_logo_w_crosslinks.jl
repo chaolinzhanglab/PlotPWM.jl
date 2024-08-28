@@ -58,7 +58,6 @@ end
 
 @userplot LogoPlotWithCrosslink
 @recipe function f(data::LogoPlotWithCrosslink; 
-                   background = [0.25 for _ = 1:4],
                    rna=true, 
                    xaxis=false,
                    yaxis=false,
@@ -91,7 +90,8 @@ end
     thickness_scaling --> thickness_scaling
     size --> logo_size
     pfm = data.args[1]
-    crosslink_mat = data.args[2]
+    background = data.args[2]
+    crosslink_mat = data.args[3]
     coords = freq2xyWcrosslink(pfm, crosslink_mat;
                      background=background, rna=rna, beta=beta,
                      logo_x_offset=logo_x_offset,
@@ -107,9 +107,23 @@ end
     end
 end
 
-
-function save_crosslinked_logoplot(pfm, c, save_name; dpi=65, rna=true)
-    p = logoplotwithcrosslink(pfm, c; dpi=dpi, rna=rna)
+"""
+    save_crosslinked_logoplot(pfm, background, c, save_name; dpi=65, rna=true)
+    Save a logoplot with crosslinks to a file
+"""
+function save_crosslinked_logoplot(pfm, background, c, save_name; dpi=65, rna=true)
+    @assert sum(pfm, dims=1) .≈ 1 "pfm must be a probability matrix"
+    @assert length(background) == 4 "background must be a vector of length 4"
+    @assert (0 .≤ background .≤ 1) "background must be a vector of probabilities"
+    @assert sum(background) ≈ 1 "background must sum to 1"
+    @assert length(c) == size(pfm, 2) "C must be a vector of length equal to the number of columns in pfm"
+    @assert all(0 .≤ c .≤ 1) "C must be a vector of probabilities"
+    @assert sum(c) ≤ 1 "The sum of C must be less than or equal 1"
+    p = logoplotwithcrosslink(pfm, background, c; dpi=dpi, rna=rna)
     savefig(p, save_name)
 end
 
+function save_crosslinked_logoplot(pfm, c, save_name; dpi=65, rna=true)
+    p = logoplotwithcrosslink(pfm, [0.25 for _ = 1:4], c; dpi=dpi, rna=rna)
+    savefig(p, save_name)
+end

@@ -7,7 +7,9 @@
 
 # What is this?
 
-PlotPWM is a package for plotting [position weight matrices (PWMs)](https://en.wikipedia.org/wiki/Position_weight_matrix), typically used to characterize and visualize motifs, i.e., the binding sites of proteins that interact with DNA or RNA.
+PlotPWM is a package for plotting [position weight matrices (PWMs)](https://en.wikipedia.org/wiki/Position_weight_matrix),  which are commonly used to characterize and visualize motifs — the binding sites where proteins interact with DNA or RNA.
+
+
 
 
 ## Table of contents
@@ -68,7 +70,7 @@ where a uniform background of `[0.25, 0.25, 0.25, 0.25]` is used implicitly.
 
 ## Plot your PWMs with crosslinking tendencies
 
-The cross-linked PWMs not only display the PWM but also account for crosslinking tendencies, which is typically done for [RNA-binding proteins (RBPs)](https://en.wikipedia.org/wiki/RNA-binding_protein).
+Cross-linked PWMs not only display the PWM but also account for crosslinking tendencies, which are typically considered for [RNA-binding proteins (RBPs)](https://en.wikipedia.org/wiki/RNA-binding_protein).
 
 To achieve this, you'll need to estimate these tendencies alongside the PFM. For a PFM with $L$ columns, you'll provide a $K \times L$ matrix $C$, where $\sum_{k,\ell}C_{k\ell} \leq 1$.
 
@@ -76,18 +78,30 @@ For example, when $K=1$:
 ```
 C = [0.01  0.04  0.05  0.0  0.74  0.05  0.03  0.05  0.03  0.0] 
 ```
+and the background:
+```
+background = [0.25, 0.25, 0.25, 0.25]
+```
+
 You can then plot the cross-linked PWM using:
 
 ```
-logoplotwithcrosslink(pfm, C; rna=true)
+logoplotwithcrosslink(pfm, background, C; rna=true)
 ```
 This will generate:
 
 ![pfm](demo/demo2.png)
 
+As with the previous example, you can also use:
+```
+logoplotwithcrosslink(pfm, C; rna=true)
+```
+which will automatically assume a uniform background of `[0.25, 0.25, 0.25, 0.25]`.
+
+
 ### Multiplexed crosslinking tendencies
 
-Multiplexed crosslinking tendencies refer to situations where multiple crosslinking signatures are present in the dataset. These different crosslinking signatures can be applied to each sequence before motif discovery tasks. This corresponds to cases where the crosslink matrix $C$ has more than one row, i.e., $K > 1$.
+Multiplexed crosslinking tendencies occur when multiple crosslinking signatures are present in the dataset. Each signature can be applied to each sequence before performing motif discovery tasks. This situation corresponds to cases where the crosslink matrix $C$ has more than one row, i.e., $K > 1$."
 
 Suppose we have 
 ```
@@ -103,7 +117,6 @@ You'd get
 ![pfm](demo/demo3.png)
 
 Here, different colors indicate different crosslinking signatures and their height is proportional to the crosslinking tendency at each position in the PWM.
-
 
 
 # Some-definitions
