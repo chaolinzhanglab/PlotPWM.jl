@@ -12,13 +12,13 @@ PlotPWM is a package for plotting [position weight matrices (PWMs)](https://en.w
 
 ## Table of contents
 
-- [Usage](#Usage)  
-      - [Plot-your-typical-PWMs](##Plot-your-typical-PWMs)
-- [Some-definitions](#Some-definitions)
+* [Usage](#Usage)  
+      * [Plot-your-typical-PWMs](##Plot-your-typical-PWMs)
+* [Some-definitions](#Some-definitions)
 
 # Usage
 
-## Plot your typical PWMs
+## Plot-your-typical-PWMs
 ```
 using PlotPWM
 
