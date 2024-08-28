@@ -11,7 +11,7 @@ PlotPWM is a package for plotting [position weight matrices (PWMs)](https://en.w
 
 # Usage
 
-## Plotting your typical PWMs
+## Plot your typical PWMs
 ```
 using PlotPWM
 
@@ -45,8 +45,19 @@ logoplot(pfm)
 ```
 to get identical results as above, where background is set to be `[0.25, 0.25, 0.25, 0.25]` by default.
 
+### Save the PWM
+You can call `save_logoplot(pfm, background, save_name)` to save your result. For example:
+```
+save_logoplot(pfm, background, "tmp/logo.png")
+```
+Or simply
+```
+save_logoplot(pfm, "tmp/logo.png")
+```
+where a uniform background of `[0.25, 0.25, 0.25, 0.25]` is used implicitly.
 
-## Plotting your PWMs with crosslinking tendencies
+
+## Plot your PWMs with crosslinking tendencies
 
 The cross-linked PWMs not only display the PWM but also account for crosslinking tendencies, which is typically done for RNA-binding proteins (RBPs).
 

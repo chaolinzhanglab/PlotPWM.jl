@@ -90,24 +90,57 @@ end
     end
 end
 
+
 """
-    save_logoplot(pfm, save_name; dpi=65)
+    save_logoplot(pfm, background, save_name; dpi=65)
 
 # Arguments
 - `pfm::Matrix{Real}`: Position frequency matrix
+- `background::Vector{Real}`: Background probabilities of A, C, G, T
 - `save_name::String`: Name of the path/file to save the plot
+
+Note that
+- `pfm` must be a probability matrix
+    - sum of each column must be 1
+- `background` must be a vector of length 4
+    - must be a vector of probabilities
+    - sum of `background` must be 1
 
 # Example
 ```julia
+
+pfm =  [0.01  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
+        0.98  0.0  0.01  0.19  0.0   0.96  0.01  0.89  0.03  0.0
+        0.0   0.0  0.0   0.77  0.01  0.0   0.0   0.0   0.56  0.0
+        0.0   0.0  0.0   0.05  0.99  0.04  0.01  0.11  0.24  0.0]
+
+background = [0.25, 0.25, 0.25, 0.25]
+
 #= save the logo plot in the tmp folder as logo.png =#
-save_logoplot(pfm, "tmp/logo.png")
+save_logoplot(pfm, background, "tmp/logo.png")
 
 #= save the logo plot in the current folder as logo.png with a dpi of 65 =#
-save_logoplot(pfm, "logo.png"; dpi=65)
+save_logoplot(pfm, background, "logo.png"; dpi=65)
 
 ```
 """
-function save_logoplot(pfm, save_name; dpi=65)
-    p = logoplot(pfm; dpi=dpi)
+function save_logoplot(pfm, background, save_name::String; dpi=65)
+    @assert sum(pfm, dims=1) .≈ 1 "pfm must be a probability matrix"
+    @assert length(background) == 4 "background must be a vector of length 4"
+    @assert (0 .≤ background .≤ 1) "background must be a vector of probabilities"
+    @assert sum(background) ≈ 1 "background must sum to 1"
+    p = logoplot(pfm, background; dpi=dpi)
     savefig(p, save_name)
+end
+
+"""
+    save_logoplot(pfm, save_name; dpi=65)
+
+    This is the same as `save_logoplot(pfm, background, save_name; dpi=65)`
+    where `background` is set to `[0.25, 0.25, 0.25, 0.25]`
+
+    See `save_logoplot(pfm, background, save_name; dpi=65)` for more details.
+"""
+function save_logoplot(pfm, save_name::String; dpi=65)
+    save_logoplot(pfm, [0.25 for _ = 1:4], save_name; dpi=dpi)
 end
