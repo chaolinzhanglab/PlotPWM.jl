@@ -22,7 +22,12 @@ pfm =  [0.01  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
         0.0   0.0  0.0   0.77  0.01  0.0   0.0   0.0   0.56  0.0
         0.0   0.0  0.0   0.05  0.99  0.04  0.01  0.11  0.24  0.0]
 
-logoplot(pfm)
+# Define the background probabilities for (A, C, G, T)
+
+background = [0.25, 0.25, 0.25, 0.25]
+
+logoplot(pfm, background)
+
 ```
 will give
 
@@ -31,6 +36,15 @@ will give
 The function `logoplot(pfm)` produces a plot where:
 - The x-axis shows the positions in the PWM. 
 - The y-axis shows the information content (bits) for each position.
+
+Here, `background` is an array representing the background probabilities for A, C, G, and T. These should sum to 1. In this case, a uniform background of `[0.25, 0.25, 0.25, 0.25]` is used, assuming equal probabilities for each base.
+
+You can also simply call 
+```
+logoplot(pfm)
+```
+to get identical results as above, where background is set to be `[0.25, 0.25, 0.25, 0.25]` by default.
+
 
 ## Plotting your PWMs with crosslinking tendencies
 

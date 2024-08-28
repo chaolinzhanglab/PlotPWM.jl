@@ -36,7 +36,6 @@ end
 
 @userplot LogoPlot
 @recipe function f(data::LogoPlot; 
-                   background = [0.25 for _ = 1:4],
                    dna=true, 
                    xaxis=false,
                    yaxis=false,
@@ -76,6 +75,7 @@ end
     thickness_scaling --> thickness_scaling
     size --> logo_size
     pfm = data.args[1]
+    background = length(data.args) ≥ 2 ? data.args[2] : [0.25 for _ = 1:4]
     coords = freq2xy(pfm; background=background, dna=dna, beta=beta,
                      logo_x_offset=logo_x_offset, 
                      logo_y_offset=logo_y_offset);
