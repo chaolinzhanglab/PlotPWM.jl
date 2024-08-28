@@ -7,14 +7,14 @@
 
 # What is this?
 
-PlotPWM is a package for plotting [position weight matrices (PWMs)](https://en.wikipedia.org/wiki/Position_weight_matrix), typically used to characterize motifs, i.e., the binding sites of proteins that interact with DNA or RNA.
+PlotPWM is a package for plotting [position weight matrices (PWMs)](https://en.wikipedia.org/wiki/Position_weight_matrix), typically used to characterize and visualize motifs, i.e., the binding sites of proteins that interact with DNA or RNA.
 
 
 ## Table of contents
 
 * [Usage](#Usage)  
    - [Plot your typical PWMs](#Plot-your-typical-PWMs)
-      - [Save the PWM](#Save-the-PWMs)
+      - [Save the PWMs](#Save-the-PWMs)
    - [Plot your PWMs with crosslinking tendencies](#Plot-your-PWMs-with-crosslinking-tendencies)
       - [Multiplexed crosslinking tendencies](#Multiplexed-crosslinking-tendencies)
 * [Some-definitions](#Some-definitions)
@@ -68,7 +68,7 @@ where a uniform background of `[0.25, 0.25, 0.25, 0.25]` is used implicitly.
 
 ## Plot your PWMs with crosslinking tendencies
 
-The cross-linked PWMs not only display the PWM but also account for crosslinking tendencies, which is typically done for RNA-binding proteins (RBPs).
+The cross-linked PWMs not only display the PWM but also account for crosslinking tendencies, which is typically done for [RNA-binding proteins (RBPs)](https://en.wikipedia.org/wiki/RNA-binding_protein).
 
 To achieve this, you'll need to estimate these tendencies alongside the PFM. For a PFM with $L$ columns, you'll provide a $K \times L$ matrix $C$, where $\sum_{k,\ell}C_{k\ell} \leq 1$.
 
