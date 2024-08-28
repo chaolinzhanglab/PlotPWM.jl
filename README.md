@@ -27,7 +27,7 @@ PlotPWM is a package for plotting [position weight matrices (PWMs)](https://en.w
 ```
 using PlotPWM
 
-# Given a position frequency matrix (each column sums to 1)
+# Given a position frequency matrix (PFM), where each column sums to 1
 
 pfm =  [0.01  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
         0.98  0.0  0.01  0.19  0.0   0.96  0.01  0.89  0.03  0.0
@@ -70,9 +70,9 @@ where a uniform background of `[0.25, 0.25, 0.25, 0.25]` is used implicitly.
 
 ## Plot your PWMs with crosslinking tendencies
 
-Cross-linked PWMs not only display the PWM but also account for crosslinking tendencies, which are typically considered for [RNA-binding proteins (RBPs)](https://en.wikipedia.org/wiki/RNA-binding_protein).
+Cross-linked PWMs not only display the PWM but also account for crosslinking tendencies, which are particularly relevant for [RNA-binding proteins (RBPs)](https://en.wikipedia.org/wiki/RNA-binding_protein) from [CLIP-Seq](https://en.wikipedia.org/wiki/Cross-linking_immunoprecipitation).
 
-To achieve this, you'll need to estimate these tendencies alongside the PFM. For a PFM with $L$ columns, you'll provide a $K \times L$ matrix $C$, where $\sum_{k,\ell}C_{k\ell} \leq 1$.
+To plot these, you'll need to estimate the crosslinking tendencies along with the PFM. For a PFM with $L$ columns, provide a $K \times L$ matrix $C$, where $\sum_{k,\ell}C_{k\ell} \leq 1$.
 
 For example, when $K=1$:
 ```
@@ -92,7 +92,9 @@ This will generate:
 
 ![pfm](demo/demo2.png)
 
-As with the previous example, you can also use:
+Setting the tag `rna=true` will change the logo from using thymine `T` to uracil `U`.
+
+Alternatively, you can use:
 ```
 logoplotwithcrosslink(pfm, C; rna=true)
 ```
@@ -110,13 +112,13 @@ C2 = [0.01  0.02  0.03  0.0   0.37  0.03  0.02  0.03  0.02  0.0
 ```
 Now, using
 ```
-logoplotwithcrosslink(pfm, C2; rna=true)
+logoplotwithcrosslink(pfm, background, C2; rna=true)
 ```
 You'd get 
 
 ![pfm](demo/demo3.png)
 
-Here, different colors indicate different crosslinking signatures and their height is proportional to the crosslinking tendency at each position in the PWM.
+Here, different colors indicate different crosslinking signatures, and their height is proportional to the crosslinking tendency at each position in the PWM. 
 
 
 # Some-definitions
