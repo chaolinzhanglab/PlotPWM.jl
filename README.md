@@ -7,10 +7,7 @@
 
 # What is this?
 
-PlotPWM is a package for plotting [position weight matrices (PWMs)](https://en.wikipedia.org/wiki/Position_weight_matrix),  which are commonly used to characterize and visualize motifs — the binding sites where proteins interact with DNA or RNA.
-
-
-
+PlotPWM is a package for plotting [position weight matrices (PWMs)](https://en.wikipedia.org/wiki/Position_weight_matrix),  which is commonly used to characterize and visualize motifs — the binding sites where proteins interact with DNA or RNA.
 
 ## Table of contents
 
