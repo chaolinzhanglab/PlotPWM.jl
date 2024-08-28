@@ -9,6 +9,12 @@
 
 PlotPWM is a package for plotting [position weight matrices (PWMs)](https://en.wikipedia.org/wiki/Position_weight_matrix), typically used to characterize motifs, i.e., the binding sites of proteins that interact with DNA or RNA.
 
+
+## Table of contents
+
+- [Usage](#Usage)
+- [Some-definitions](#Some-definitions)
+
 # Usage
 
 ## Plot your typical PWMs
@@ -27,7 +33,6 @@ pfm =  [0.01  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
 background = [0.25, 0.25, 0.25, 0.25]
 
 logoplot(pfm, background)
-
 ```
 will give
 
@@ -97,7 +102,7 @@ Here, different colors indicate different crosslinking signatures and their heig
 
 
 
-# Note
+# Some-definitions
 
 ### Definition of Information Content in PWMs
 In a position weight matrix (PWM), the "letter height", or more formally, the <b>information content</b> $IC(\cdot)$  of the $i$-th column $c_i$, quantifies how conserved the nucleotides are at that position compared to a background model. It is calculated using the formula:
