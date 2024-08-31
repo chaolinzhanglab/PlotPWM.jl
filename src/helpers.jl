@@ -5,4 +5,4 @@ ic_height(col, bg; ϵ = 1e-30) = col .* log2.((col .+ ϵ) ./ bg)
 ic_height_here(col; background=[0.25 for _ = 1:4]) = sum(ic_height(col, background))
 
 
-width_factor(num_cols) = exp(-0.65*num_cols+7)+25
+_width_factor_(num_cols) = exp(-0.5*num_cols+7)+25

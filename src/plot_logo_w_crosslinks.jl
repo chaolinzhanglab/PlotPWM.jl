@@ -70,7 +70,7 @@ end
                    beta=1.0)
 
     num_cols = size(data.args[1], 2)
-    logo_size = ((exp(-0.65*num_cols+7)+25)*num_cols, 220)
+    logo_size = (_width_factor_(num_cols)*num_cols, 220)
     framestyle --> :zerolines
     ylims --> (-crosslink_stretch_factor, 2)
     yticks --> 0:1:2  # Ensure ticks are generated

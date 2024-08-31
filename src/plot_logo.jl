@@ -47,8 +47,7 @@ end
                    dpi=300,
                    beta=1.0)
     num_cols = size(data.args[1], 2)
-    width_factor = exp(-0.65*num_cols+7)+25
-    logo_size = (width_factor*num_cols, 220)
+    logo_size = (_width_factor_(num_cols)*num_cols, 220)
     ylims --> (0, 2)
     xlims --> (-0.5, num_cols+1)
     framestyle --> :zerolines
