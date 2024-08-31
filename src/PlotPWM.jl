@@ -1,4 +1,4 @@
-module SeqLogo
+module PlotPWM
 
 using Plots
 
