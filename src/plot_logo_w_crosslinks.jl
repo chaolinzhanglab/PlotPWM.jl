@@ -112,9 +112,9 @@ end
     Save a logoplot with crosslinks to a file
 """
 function save_crosslinked_logoplot(pfm, background, c, save_name; dpi=65, rna=true)
-    @assert sum(pfm, dims=1) .≈ 1 "pfm must be a probability matrix"
+    @assert all(sum(pfm, dims=1) .≈ 1) "pfm must be a probability matrix"
     @assert length(background) == 4 "background must be a vector of length 4"
-    @assert (0 .≤ background .≤ 1) "background must be a vector of probabilities"
+    @assert all(0 .≤ background .≤ 1) "background must be a vector of probabilities"
     @assert sum(background) ≈ 1 "background must sum to 1"
     @assert length(c) == size(pfm, 2) "C must be a vector of length equal to the number of columns in pfm"
     @assert all(0 .≤ c .≤ 1) "C must be a vector of probabilities"

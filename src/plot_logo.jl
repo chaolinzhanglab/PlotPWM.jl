@@ -124,9 +124,9 @@ save_logoplot(pfm, background, "logo.png"; dpi=65)
 ```
 """
 function save_logoplot(pfm, background, save_name::String; dpi=65)
-    @assert sum(pfm, dims=1) .≈ 1 "pfm must be a probability matrix"
+    @assert all(sum(pfm, dims=1) .≈ 1) "pfm must be a probability matrix"
     @assert length(background) == 4 "background must be a vector of length 4"
-    @assert (0 .≤ background .≤ 1) "background must be a vector of probabilities"
+    @assert all(0 .≤ background .≤ 1) "background must be a vector of probabilities"
     @assert sum(background) ≈ 1 "background must sum to 1"
     p = logoplot(pfm, background; dpi=dpi)
     savefig(p, save_name)
