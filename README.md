@@ -67,7 +67,7 @@ where a uniform background of `[0.25, 0.25, 0.25, 0.25]` is used implicitly.
 
 ## Plot your PWMs with crosslinking tendencies
 
-Cross-linked PWMs not only display the PWM but also account for crosslinking tendencies, which are particularly relevant for [RNA-binding proteins (RBPs)](https://en.wikipedia.org/wiki/RNA-binding_protein) from [CLIP-Seq](https://en.wikipedia.org/wiki/Cross-linking_immunoprecipitation).
+Cross-linked PWMs not only display the PWM but also account for crosslinking tendencies, which are particularly relevant for the binding sites of [RNA-binding proteins (RBPs)](https://en.wikipedia.org/wiki/RNA-binding_protein) from [CLIP-Seq](https://en.wikipedia.org/wiki/Cross-linking_immunoprecipitation).
 
 To plot these, you'll need to estimate the crosslinking tendencies along with the PFM. For a PFM with $L$ columns, provide a $K \times L$ matrix $C$, where $\sum_{k,\ell}C_{k\ell} \leq 1$.
 
