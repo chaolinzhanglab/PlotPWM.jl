@@ -31,9 +31,15 @@ returns a complement of that vector, i.e. [4:6, 11:13]
 complement_ranges([1:3, 7:10], 13)
 > [4:6, 11:13]
 =#
+
+const place_folder_unit_range_vec = UnitRange{Int}[]
+
 function complement_ranges(ranges::Vector{UnitRange{Int}}, len::Int)
     # Flatten the ranges into a sorted vector of individual indices
     complement_indices = setdiff(collect(1:len), reduce(union, (collect.(ranges))))
+    if isempty(complement_indices)
+        return place_folder_unit_range_vec
+    end
     return group_to_ranges(complement_indices)
 end
 

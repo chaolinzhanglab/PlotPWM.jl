@@ -12,8 +12,6 @@
                    dpi=65,
                    beta=1.0
                    )
-
-    @info "changed!"
     if !setup_off
         num_cols = data.args[1]
         ylims --> (0, 2)

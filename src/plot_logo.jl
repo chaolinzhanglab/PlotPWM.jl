@@ -93,18 +93,27 @@ end
     end
 end
 
+# check if there's any overlap in the highlighted region
+function chk_overlap(highlighted_regions::Vector{UnitRange{T}}) where T <: Integer
+    for i in 1:length(highlighted_regions)-1
+        if is_overlapping(highlighted_regions[i], highlighted_regions[i+1])
+            return true
+        end
+    end
+    return false
+end
 
 # plot the logo with highlight
 function logoplot_with_highlight(
         pfm::AbstractMatrix, 
-        background::AbstractMatrix, 
+        background::AbstractVector, 
         highlighted_regions::Vector{UnitRange{Int}};
         dpi=65,
         alpha = _alpha_
     )
 
     if length(highlighted_regions) > 1
-        @assert !reduce(is_overlapping, highlighted_regions) "highlighted_regions shouldn't be overlapping"
+        @assert !chk_overlap(highlighted_regions) "highlighted_regions shouldn't be overlapping"
     end
     
     num_columns = size(pfm, 2)
