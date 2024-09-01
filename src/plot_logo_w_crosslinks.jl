@@ -124,6 +124,6 @@ function save_crosslinked_logoplot(pfm, background, c, save_name; dpi=65, rna=tr
 end
 
 function save_crosslinked_logoplot(pfm, c, save_name; dpi=65, rna=true)
-    p = logoplotwithcrosslink(pfm, [0.25 for _ = 1:4], c; dpi=dpi, rna=rna)
+    p = logoplotwithcrosslink(pfm, default_genomic_background, c; dpi=dpi, rna=rna)
     savefig(p, save_name)
 end

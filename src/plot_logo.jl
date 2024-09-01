@@ -43,36 +43,40 @@ end
                    logo_x_offset=0.0,
                    logo_y_offset=0.0,
                    ytickfontsize=265,
+                   setup_off=false,
                    margin=275Plots.mm,
                    dpi=300,
-                   beta=1.0)
-    num_cols = size(data.args[1], 2)
-    logo_size = (_width_factor_(num_cols)*num_cols, 220)
-    ylims --> (0, 2)
-    xlims --> (-0.5, num_cols+1)
-    framestyle --> :zerolines
+                   beta=1.0,
+                   alpha=1.0
+                   )
+    if !setup_off
+        num_cols = size(data.args[1], 2)
+        ylims --> (0, 2)
+        xlims --> (-0.5, num_cols+1)
+        logo_size = (_width_factor_(num_cols)*num_cols, 220)
+        ticks --> :native
+        yticks --> 0:1:2  # Ensure ticks are generated
+        ytickfontcolor --> :gray
+        ytick_direction --> :out
+        ytickfontsize --> ytickfontsize
+        yminorticks --> 25
+        ytickfont --> font(45, "Helvetica")
+        xtickfontcolor --> :gray
+        xticks --> 1:1:num_cols
+        xtickfontsize --> 145
+        xaxis && (xaxis --> xaxis)
+        yaxis && (yaxis --> yaxis)
+        legend --> false
+        tickdir --> :out
+        grid --> false
+        dtick--> 10
+        margin --> margin
+        thickness_scaling --> thickness_scaling
+        size --> logo_size
+        framestyle --> :zerolines
+    end
     dpi --> dpi
-
-    ticks --> :native
-    yticks --> 0:1:2  # Ensure ticks are generated
-    ytickfontcolor --> :gray
-    ytick_direction --> :out
-    ytickfontsize --> ytickfontsize
-    yminorticks --> 25
-    ytickfont --> font(45, "Helvetica")
-
-    xtickfontcolor --> :gray
-    xticks --> 1:1:num_cols
-    xtickfontsize --> 145
-    xaxis && (xaxis --> xaxis)
-    yaxis && (yaxis --> yaxis)
-    legend --> false
-    tickdir --> :out
-    grid --> false
-    dtick--> 10
-    margin --> margin
-    thickness_scaling --> thickness_scaling
-    size --> logo_size
+    alpha --> alpha
     pfm = data.args[1]
     background = length(data.args) ≥ 2 ? data.args[2] : [0.25 for _ = 1:4]
     coords = freq2xy(pfm; background=background, dna=dna, beta=beta,
@@ -87,6 +91,50 @@ end
             v.xs, v.ys
         end
     end
+end
+
+
+# plot the logo with highlight
+function logoplot_with_highlight(
+        pfm::AbstractMatrix, 
+        background::AbstractMatrix, 
+        highlighted_regions::Vector{UnitRange{Int}};
+        dpi=65,
+        alpha = _alpha_
+    )
+
+    if length(highlighted_regions) > 1
+        @assert !reduce(is_overlapping, highlighted_regions) "highlighted_regions shouldn't be overlapping"
+    end
+    
+    num_columns = size(pfm, 2)
+    range_complement = complement_ranges(highlighted_regions, num_columns)
+    p = nothinglogo(num_columns);
+    for r in range_complement
+        logo_x_offset = r.start-1
+        logoplot!(p, 
+                  (@view pfm[:, r]), background; 
+                  alpha=alpha,
+                  dpi=dpi,
+                  setup_off=true, 
+                  logo_x_offset=logo_x_offset)
+    end
+    for r in highlighted_regions
+        logo_x_offset = r.start-1
+        logoplot!(p, (@view pfm[:, r]), background; 
+                     dpi=dpi,
+                     setup_off=true, 
+                     logo_x_offset=logo_x_offset)
+    end
+    return p
+end
+
+function logoplot_with_highlight(
+        pfm::AbstractMatrix, 
+        highlighted_regions::Vector{UnitRange{Int}})
+    return logoplot_with_highlight(pfm, 
+                                   default_genomic_background, 
+                                   highlighted_regions)
 end
 
 
@@ -123,12 +171,16 @@ save_logoplot(pfm, background, "logo.png"; dpi=65)
 
 ```
 """
-function save_logoplot(pfm, background, save_name::String; dpi=65)
+function save_logoplot(pfm, background, save_name::String; dpi=65, highlighted_regions=nothing)
     @assert all(sum(pfm, dims=1) .≈ 1) "pfm must be a probability matrix"
     @assert length(background) == 4 "background must be a vector of length 4"
     @assert all(0 .≤ background .≤ 1) "background must be a vector of probabilities"
     @assert sum(background) ≈ 1 "background must sum to 1"
-    p = logoplot(pfm, background; dpi=dpi)
+    if isnothing(highlighted_regions)
+        p = logoplot(pfm, background; dpi=dpi, highlighted_regions=highlighted_regions)
+    else
+        p = logoplot_with_highlight(pfm, background, highlighted_regions; dpi=dpi)
+    end
     savefig(p, save_name)
 end
 
@@ -140,6 +192,6 @@ end
 
     See `save_logoplot(pfm, background, save_name; dpi=65)` for more details.
 """
-function save_logoplot(pfm, save_name::String; dpi=65)
-    save_logoplot(pfm, [0.25 for _ = 1:4], save_name; dpi=dpi)
+function save_logoplot(pfm, save_name::String; dpi=65, highlighted_regions=nothing)
+    save_logoplot(pfm, default_genomic_background, save_name; dpi=dpi, highlighted_regions=highlighted_regions)
 end

@@ -1,6 +1,9 @@
 const rna_letters = ["A", "C", "G", "U"]
 const dna_letters = ["A", "C", "G", "T"]
 
+const _alpha_ = 0.35 # transparency for non-highlighted regions
+const default_genomic_background = [0.25 for _ = 1:4]
+
 rectangle(x, y, w, h) = (; x = (x .+ [0, w, w, 0]), y = (y .+ [0, 0, h, h]))
 
 const BASIC_RECT = rectangle(0.2, 0.0, 0.6, 1.0)
