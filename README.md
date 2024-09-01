@@ -16,7 +16,7 @@ PlotPWM is a package for plotting [position weight matrices (PWMs)](https://en.w
       - [Save the PWMs](#Save-the-PWMs)
    - [Plot your PWMs with crosslinking tendencies](#Plot-your-PWMs-with-crosslinking-tendencies)
       - [Multiplexed crosslinking tendencies](#Multiplexed-crosslinking-tendencies)
-* [Some-definitions](#Some-definitions)
+<!-- * [Some-definitions](#Some-definitions) -->
 
 # Usage
 
