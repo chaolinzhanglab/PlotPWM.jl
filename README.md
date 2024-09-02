@@ -132,10 +132,14 @@ to get
 
 You can do it for crosslinked version as well:
 ```
-highlighted_regions2=[1:4]
+highlighted_regions2=[1:5]
 logoplot_with_highlight_crosslink(pfm, background, C, highlighted_regions2)
-
 ```
+
+![highlight-pfm](demo/demo5.png)
+
+<!-- 
+save_crosslinked_logoplot(pfm, C, "tmp.png"; highlighted_regions=highlighted_regions2) -->
 
 ## Acknowledgement
 This code repo modifies the code using the work from https://github.com/BenjaminDoran/LogoPlots.jl.
