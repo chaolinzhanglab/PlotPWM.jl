@@ -39,15 +39,12 @@ end
                    dna=true, 
                    xaxis=false,
                    yaxis=false,
-                   thickness_scaling=0.0525,
                    logo_x_offset=0.0,
                    logo_y_offset=0.0,
-                   ytickfontsize=265,
                    setup_off=false,
-                   margin=275Plots.mm,
-                   dpi=65,
                    alpha=1.0,
-                   beta=1.0
+                   beta=1.0,
+                   dpi=65
                    )
     if !setup_off
         num_cols = size(data.args[1], 2)
@@ -59,11 +56,11 @@ end
         ytickfontcolor --> :gray
         ytick_direction --> :out
         ytickfontsize --> ytickfontsize
-        yminorticks --> 25
+        yminorticks --> yminorticks
         ytickfont --> font(logo_font_size, logo_font)
         xtickfontcolor --> :gray
         xticks --> 1:1:num_cols
-        xtickfontsize --> 145
+        xtickfontsize --> xtickfontsize
         xaxis && (xaxis --> xaxis)
         yaxis && (yaxis --> yaxis)
         legend --> false

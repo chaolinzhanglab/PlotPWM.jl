@@ -28,7 +28,6 @@ function freq2xyWcrosslink(pfm, crosslink_mat;
                  logo_y_offset = 0.0, 
                  alphabet_coords=ALPHABET_GLYPHS,
                  very_small_perturb = 1e-5 .* rand(4))
-    # @assert sum(pfm, dims=1) .≈ 1 "pfm must be a probability matrix"
     all_coords = []
     charnames = rna ? rna_letters : dna_letters
     # for each character (row) collect all positions and heights of that character's polygon
@@ -55,35 +54,31 @@ function freq2xyWcrosslink(pfm, crosslink_mat;
     all_coords
 end
 
-
 @userplot LogoPlotWithCrosslink
 @recipe function f(data::LogoPlotWithCrosslink; 
                    rna=true, 
                    xaxis=false,
                    yaxis=false,
-                   thickness_scaling=0.0525,
                    logo_x_offset=0.0,
                    logo_y_offset=0.0,
-                   ytickfontsize=265,
                    setup_off=false,
-                   margin = 275Plots.mm,
-                   dpi=65,
-                   alpha = 1.0,
+                   alpha=1.0,
                    beta=1.0,
+                   dpi=65
                    )
     if !setup_off
         num_cols = size(data.args[1], 2)
-        logo_size = (_width_factor_(num_cols)*num_cols, 220)
+        logo_size = (_width_factor_(num_cols)*num_cols, logo_height)
         framestyle --> :zerolines
-        ylims --> (-crosslink_stretch_factor, 2)
-        yticks --> 0:1:2  # Ensure ticks are generated
+        ylims --> (-crosslink_stretch_factor, ylim_max)
+        yticks --> yticks  # Ensure ticks are generated
         ytickfontcolor --> :gray
         xtickfontcolor --> :gray
         xticks --> 1:1:num_cols
         # margin --> margin
         ytickfontsize --> ytickfontsize
-        xtickfontsize --> 145    
-        ytickfont --> font(45, "Helvetica")
+        xtickfontsize --> xtickfontsize    
+        ytickfont --> font(logo_font_size, logo_font)
         xaxis && (xaxis --> xaxis)
         yaxis && (yaxis --> yaxis)
         legend --> false
@@ -161,7 +156,7 @@ end
     save_crosslinked_logoplot(pfm, background, c, save_name; dpi=65, rna=true)
     Save a logoplot with crosslinks to a file
 """
-function save_crosslinked_logoplot(pfm, background, c, save_name; dpi=65, rna=true, highlighted_regions=nothing)
+function save_crosslinked_logoplot(pfm, background, c, save_name; dpi=default_dpi, rna=true, highlighted_regions=nothing)
     @assert all(sum(pfm, dims=1) .≈ 1) "pfm must be a probability matrix"
     @assert length(background) == 4 "background must be a vector of length 4"
     @assert all(0 .≤ background .≤ 1) "background must be a vector of probabilities"
@@ -177,6 +172,6 @@ function save_crosslinked_logoplot(pfm, background, c, save_name; dpi=65, rna=tr
     savefig(p, save_name)
 end
 
-function save_crosslinked_logoplot(pfm, c, save_name; dpi=65, rna=true, highlighted_regions=nothing)
+function save_crosslinked_logoplot(pfm, c, save_name; dpi=default_dpi, rna=true, highlighted_regions=nothing)
     save_crosslinked_logoplot(pfm, default_genomic_background, c, save_name; dpi=dpi, rna=rna, highlighted_regions=highlighted_regions)
 end
