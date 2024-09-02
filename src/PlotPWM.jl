@@ -10,7 +10,7 @@ include("plot_logo_w_crosslinks.jl")
 include("plot_nothing.jl")
 
 export LogoPlot, 
-       LogoPlotWithCrosslink, 
+       logoplotwithcrosslink, 
        logoplot_with_highlight,
        logoplot_with_highlight_crosslink,
        save_logoplot, 

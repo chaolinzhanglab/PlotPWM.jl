@@ -20,83 +20,20 @@ function crosslink!(crosslink_mat, all_coords, logo_x_offset, logo_y_offset)
     end
 end
 
-function freq2xyWcrosslink(pfm, crosslink_mat; 
-                 background=[0.25 for _ = 1:4],
-                 rna=true, 
-                 beta=1.0, # width of the x-axis for each letter in the motif
+function freq2xyWcrosslink(crosslink_mat; 
                  logo_x_offset = 0.0,
                  logo_y_offset = 0.0, 
                  alphabet_coords=ALPHABET_GLYPHS,
                  very_small_perturb = 1e-5 .* rand(4))
     all_coords = []
-    charnames = rna ? rna_letters : dna_letters
-    # for each character (row) collect all positions and heights of that character's polygon
-    for (j, c) in enumerate(charnames)
-        xs, ys = Float64[], Float64[]
-        # get character glyph coords else fall back to a simple rectangle
-        charglyph = get(alphabet_coords, c, BASIC_RECT)
-        #= for each postion in the sequence push in the coords 
-           for the character's polygon and adjust y_height based 
-           on the motif's weight =#
-        for (xoffset,col) in enumerate(eachcol(pfm))
-            acgt = @view col[1:4]
-            ic_height = ic_height_here(col; background=background)
-            adjusted_height = ic_height .* acgt .+ very_small_perturb
-            yoffset = sum(adjusted_height[adjusted_height .< adjusted_height[j]])
-            push!(xs, ((beta * 1.2) .* charglyph.x .+ (1/((beta * 0.9)))*0.35 .+ xoffset .+ (logo_x_offset - 1))...)
-            push!(xs, NaN)
-            push!(ys, (adjusted_height[j] .* charglyph.y .+ yoffset .+ logo_y_offset)...)
-            push!(ys, NaN)
-        end        
-        push!(all_coords, (c, (;xs, ys)))
-    end
     crosslink!(crosslink_mat, all_coords, logo_x_offset, logo_y_offset)
     all_coords
 end
 
-@userplot LogoPlotWithCrosslink
-@recipe function f(data::LogoPlotWithCrosslink; 
-                   rna=true, 
-                   xaxis=false,
-                   yaxis=false,
-                   logo_x_offset=0.0,
-                   logo_y_offset=0.0,
-                   setup_off=false,
-                   alpha=1.0,
-                   beta=1.0,
-                   dpi=65
-                   )
-    if !setup_off
-        num_cols = size(data.args[1], 2)
-        logo_size = (_width_factor_(num_cols)*num_cols, logo_height)
-        framestyle --> :zerolines
-        ylims --> (-crosslink_stretch_factor, ylim_max)
-        yticks --> yticks  # Ensure ticks are generated
-        ytickfontcolor --> :gray
-        xtickfontcolor --> :gray
-        xticks --> 1:1:num_cols
-        # margin --> margin
-        ytickfontsize --> ytickfontsize
-        xtickfontsize --> xtickfontsize    
-        ytickfont --> font(logo_font_size, logo_font)
-        xaxis && (xaxis --> xaxis)
-        yaxis && (yaxis --> yaxis)
-        legend --> false
-        margin --> margin
-        tickdir --> :in
-        grid --> false
-        thickness_scaling --> thickness_scaling
-        size --> logo_size
-    end
-    dpi --> dpi
-    alpha --> alpha
-    pfm = data.args[1]
-    background = data.args[2]
-    crosslink_mat = data.args[3]
-    coords = freq2xyWcrosslink(pfm, crosslink_mat;
-                     background=background, rna=rna, beta=beta,
-                     logo_x_offset=logo_x_offset,
-                     logo_y_offset=logo_y_offset);
+@userplot LogoCrosslink
+@recipe function f(data::LogoCrosslink)
+    crosslink_mat = data.args[1]
+    coords = freq2xyWcrosslink(crosslink_mat);
     for (k, v) in coords
         @series begin
             fill := 0
@@ -108,13 +45,24 @@ end
     end
 end
 
+function logoplotwithcrosslink(pfm, background, c; dpi=default_dpi, rna=true)
+    p = nothinglogo(size(pfm, 2); crosslink=true)
+    logoplot!(p, pfm, background; dpi=dpi, setup_off=true, rna=rna)
+    logocrosslink!(p, c)
+    return p
+end
+
+logoplotwithcrosslink(pfm, c; dpi=default_dpi, rna=true) =
+    logoplotwithcrosslink(pfm, default_genomic_background, c; dpi=dpi, rna=rna)
+
 function logoplot_with_highlight_crosslink(
         pfm,
         background, 
         c, 
         highlighted_regions::Vector{UnitRange{Int}};
         dpi = 65,
-        alpha = _alpha_
+        alpha = _alpha_,
+        rna=true
     )
     check_highlighted_regions(highlighted_regions)
     num_columns, range_complement = 
@@ -123,21 +71,24 @@ function logoplot_with_highlight_crosslink(
     p = nothinglogo(num_columns; crosslink=true)
     for r in range_complement
         logo_x_offset = r.start - 1
-        logoplotwithcrosslink!(p, 
-                    (@view pfm[:, r]), background, (@view c[:, r]);
+        logoplot!(p, 
+                    (@view pfm[:, r]), background;
                     alpha=alpha,
                     dpi=dpi,
                     setup_off=true,
-                    logo_x_offset=logo_x_offset)
+                    logo_x_offset=logo_x_offset,
+                    rna=rna)
     end
     for r in highlighted_regions
         logo_x_offset = r.start - 1
-        logoplotwithcrosslink!(p, 
-                    (@view pfm[:, r]), background, (@view c[:, r]);
+        logoplot!(p, 
+                    (@view pfm[:, r]), background;
                     dpi=dpi,
                     setup_off=true,
-                    logo_x_offset=logo_x_offset)
+                    logo_x_offset=logo_x_offset,
+                    rna=rna)
     end
+    logocrosslink!(p, c)
     return p
 end
 

@@ -1,7 +1,7 @@
 
 function freq2xy(pfm; 
                  background=[0.25 for _ = 1:4],
-                 dna=true, 
+                 rna=false, 
                  beta=1.0, # width of the x-axis for each letter in the motif
                  logo_x_offset = 0.0,
                  logo_y_offset = 0.0, 
@@ -9,7 +9,7 @@ function freq2xy(pfm;
                  very_small_perturb = 1e-5 .* rand(4))
     # @assert sum(pfm, dims=1) .≈ 1 "pfm must be a probability matrix"
     all_coords = []
-    charnames = dna ? dna_letters : rna_letters
+    charnames = rna ? rna_letters : dna_letters
     # For each character (row):
     #   Collect all positions and heights of that character's polygon
     for (j, c) in enumerate(charnames)
@@ -36,7 +36,7 @@ end
 
 @userplot LogoPlot
 @recipe function f(data::LogoPlot; 
-                   dna=true, 
+                   rna=false, 
                    xaxis=false,
                    yaxis=false,
                    logo_x_offset=0.0,
@@ -75,7 +75,7 @@ end
     alpha --> alpha
     pfm = data.args[1]
     background = length(data.args) ≥ 2 ? data.args[2] : [0.25 for _ = 1:4]
-    coords = freq2xy(pfm; background=background, dna=dna, beta=beta,
+    coords = freq2xy(pfm; background=background, rna=rna, beta=beta,
                      logo_x_offset=logo_x_offset, 
                      logo_y_offset=logo_y_offset);
     for (k, v) in coords
