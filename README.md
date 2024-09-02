@@ -126,7 +126,7 @@ You'd get
 Here, different colors indicate different crosslinking signatures, and their height is proportional to the crosslinking tendency at each position in the PWM. 
 
 ## Plot your PWM with highlighted regions
-Sometimes you may have regions that you want to highlight, for example, when you have transcription factors embedded in a (long) transposable element (e.g. see figure 4 in this [paper](https://academic.oup.com/bioinformatics/article/39/6/btad378/7192989)). Then, what you can do is to provide a vector of `UnitRange{Int}` to highlight the regions of interest, e.g. 
+Sometimes you may have columns that you want to highlight, for example, when you have transcription factors embedded in a (long) transposable element (e.g. see figure 4 in this [paper](https://academic.oup.com/bioinformatics/article/39/6/btad378/7192989)). Then, what you can do is to provide a vector of `UnitRange{Int}` to highlight the regions of interest, e.g. 
 ```
 highlighted_regions1=[4:8]
 ```
