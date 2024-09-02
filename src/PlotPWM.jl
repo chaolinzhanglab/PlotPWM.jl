@@ -3,6 +3,7 @@ module PlotPWM
 using Plots
 
 include("const.jl")
+include("const_glyphs.jl")
 include("helpers.jl")
 include("plot_logo.jl")
 include("plot_logo_w_crosslinks.jl")

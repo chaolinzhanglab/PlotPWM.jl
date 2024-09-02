@@ -51,16 +51,16 @@ end
                    )
     if !setup_off
         num_cols = size(data.args[1], 2)
-        ylims --> (0, 2)
-        xlims --> (-0.5, num_cols+1)
-        logo_size = (_width_factor_(num_cols)*num_cols, 220)
+        ylims --> (0, ylim_max)
+        xlims --> (xlim_min, num_cols+1)
+        logo_size = (_width_factor_(num_cols)*num_cols, logo_height)
         ticks --> :native
-        yticks --> 0:1:2  # Ensure ticks are generated
+        yticks --> yticks  # Ensure ticks are generated
         ytickfontcolor --> :gray
         ytick_direction --> :out
         ytickfontsize --> ytickfontsize
         yminorticks --> 25
-        ytickfont --> font(45, "Helvetica")
+        ytickfont --> font(logo_font_size, logo_font)
         xtickfontcolor --> :gray
         xticks --> 1:1:num_cols
         xtickfontsize --> 145
@@ -69,7 +69,6 @@ end
         legend --> false
         tickdir --> :out
         grid --> false
-        dtick--> 10
         margin --> margin
         thickness_scaling --> thickness_scaling
         size --> logo_size

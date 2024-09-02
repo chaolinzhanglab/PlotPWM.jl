@@ -81,7 +81,6 @@ end
         xtickfontcolor --> :gray
         xticks --> 1:1:num_cols
         # margin --> margin
-        left_margin --> left_margin
         ytickfontsize --> ytickfontsize
         xtickfontsize --> 145    
         ytickfont --> font(45, "Helvetica")
@@ -125,8 +124,6 @@ function logoplot_with_highlight_crosslink(
     check_highlighted_regions(highlighted_regions)
     num_columns, range_complement = 
         get_numcols_and_range_complement(pfm, highlighted_regions)
-
-    @info "num_columns: $num_columns, range_complement: $range_complement"
 
     p = nothinglogo(num_columns; crosslink=true)
     for r in range_complement

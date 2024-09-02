@@ -1,15 +1,15 @@
-# using PlotPWM
+using PlotPWM
 
-# pfm =  [0.02  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
-#         0.98  0.0  0.02  0.19  0.0   0.96  0.01  0.89  0.03  0.0
-#         0.0   0.0  0.0   0.77  0.01  0.0   0.0   0.0   0.56  0.0
-#         0.0   0.0  0.0   0.04  0.99  0.04  0.01  0.11  0.23  0.0]
+pfm =  [0.02  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
+        0.98  0.0  0.02  0.19  0.0   0.96  0.01  0.89  0.03  0.0
+        0.0   0.0  0.0   0.77  0.01  0.0   0.0   0.0   0.56  0.0
+        0.0   0.0  0.0   0.04  0.99  0.04  0.01  0.11  0.23  0.0]
 
-# C = [0.01  0.04  0.05  0.0  0.74  0.05  0.03  0.05  0.03  0.0] 
+C = [0.01  0.04  0.05  0.0  0.74  0.05  0.03  0.05  0.03  0.0] 
 
-# background = [0.25, 0.25, 0.25, 0.25]
+background = [0.25, 0.25, 0.25, 0.25]
 
-# logoplotwithcrosslink(pfm, background, C; rna=true)
+logoplotwithcrosslink(pfm, background, C; rna=true)
 
 # highlighted_regions=[1:5]
 
@@ -80,11 +80,11 @@
 
 # r = 1:3
 
-reduce(is_overlapping, highlighted_regions)
+# reduce(is_overlapping, highlighted_regions)
 
 
-!reduce(is_overlapping, [1:5, 3:8])
-reduce(is_overlapping, [1:5])
+# !reduce(is_overlapping, [1:5, 3:8])
+# reduce(is_overlapping, [1:5])
 
 
 # p = logoplot_with_highlight(pfm, [0.25 for _ = 1:4], [1:5])
