@@ -16,8 +16,8 @@ background = [0.25, 0.25, 0.25, 0.25]
     true
 end
 
-C = [0.01  0.02  0.03  0.0   0.37  0.03  0.02  0.03  0.02  0.0
-     0.03  0.0   0.11  0.04  0.26  0.0   0.03  0.01  0.02  0.02]
+C = [0.01  0.01  0.03  0.0   0.37  0.03  0.02  0.03  0.01  0.0
+     0.01  0.0   0.11  0.01  0.26  0.0   0.03  0.01  0.02  0.01]
 
 # test basic plotting is ok for crosslinking
 @test begin
@@ -25,19 +25,41 @@ C = [0.01  0.02  0.03  0.0   0.37  0.03  0.02  0.03  0.02  0.0
     true
 end
 
-highlighted_regions=[1:3, 5:7]
+highlighted_regions1=[1:3, 7:10]
+highlighted_regions2=[4:8]
 
 # test if plotting is ok for highlighted regions
 @test begin
-    logoplot_with_highlight(pfm, background, highlighted_regions)
+    logoplot_with_highlight(pfm, background, highlighted_regions1)
+    logoplot_with_highlight(pfm, background, highlighted_regions2)
     true
 end
 
 # test if plotting is ok for crosslinking with highlighted regions
 @test begin
-    logoplot_with_highlight_crosslink(pfm, background, C, highlighted_regions)
+    logoplot_with_highlight_crosslink(pfm, background, C, highlighted_regions1)
+    logoplot_with_highlight_crosslink(pfm, background, C, highlighted_regions2)
     true
 end
 
+# test if output file is created for logoplot
+@test begin
+    output_file = "output_plot.png"  # Replace with your file path
+    save_logoplot(pfm, background, output_file; highlighted_regions=highlighted_regions2)
+    # Optionally, delete the file after the test
+    test_condition = isfile(output_file)  # Check if the file exists
+    rm(output_file; force=true)
+    test_condition
+end
+
+# test if output file is created for crosslinked logoplot
+@test begin
+    output_file = "output_plot_crosslinked.png"  # Replace with your file path
+    save_crosslinked_logoplot(pfm, background, C, output_file; highlighted_regions=highlighted_regions2)
+    # Optionally, delete the file after the test
+    test_condition = isfile(output_file)  # Check if the file exists
+    rm(output_file; force=true)
+    test_condition
+end
 
 end

@@ -189,7 +189,7 @@ save_logoplot(pfm, background, "logo.png"; dpi=65)
 
 ```
 """
-function save_logoplot(pfm, background, save_name::String; dpi=65, highlighted_regions=nothing)
+function save_logoplot(pfm, background, save_name::String; dpi=default_dpi, highlighted_regions=nothing)
     @assert all(sum(pfm, dims=1) .≈ 1) "pfm must be a probability matrix"
     @assert length(background) == 4 "background must be a vector of length 4"
     @assert all(0 .≤ background .≤ 1) "background must be a vector of probabilities"
@@ -210,6 +210,6 @@ end
 
     See `save_logoplot(pfm, background, save_name; dpi=65)` for more details.
 """
-function save_logoplot(pfm, save_name::String; dpi=65, highlighted_regions=nothing)
+function save_logoplot(pfm, save_name::String; dpi=default_dpi, highlighted_regions=nothing)
     save_logoplot(pfm, default_genomic_background, save_name; dpi=dpi, highlighted_regions=highlighted_regions)
 end

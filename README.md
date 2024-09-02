@@ -104,18 +104,38 @@ Multiplexed crosslinking tendencies occur when multiple crosslinking signatures 
 
 Suppose we have 
 ```
-C2 = [0.01  0.02  0.03  0.0   0.37  0.03  0.02  0.03  0.02  0.0
-      0.03  0.0   0.11  0.04  0.26  0.0   0.03  0.01  0.02  0.02]
+C2 = [0.01  0.01  0.03  0.0   0.37  0.03  0.02  0.03  0.01  0.0
+     0.01  0.0   0.11  0.01  0.26  0.0   0.03  0.01  0.02  0.01]
 ```
 Now, using
 ```
-logoplotwithcrosslink(pfm, background, C2; rna=true)
+logoplotwithcrosslink(pfm, background, C; rna=true)
 ```
 You'd get 
 
 ![pfm](demo/demo3.png)
 
 Here, different colors indicate different crosslinking signatures, and their height is proportional to the crosslinking tendency at each position in the PWM. 
+
+## Plot your PWM with highlighted regions
+Sometimes you may have regions that you want to highlight, for example, when you have transcription factors embedded in a (long) transposable element (e.g. see figure 4 in this [paper](https://academic.oup.com/bioinformatics/article/39/6/btad378/7192989)). Then, what you can do is to provide a vector of `UnitRange{Int}` to highlight the regions of interest, e.g. 
+```
+highlighted_regions1=[4:8]
+```
+and do 
+```
+logoplot_with_highlight(pfm, background, highlighted_regions1)
+```
+to get 
+
+![highlight-pfm](demo/demo4.png)
+
+You can do it for crosslinked version as well:
+```
+highlighted_regions2=[1:4]
+logoplot_with_highlight_crosslink(pfm, background, C, highlighted_regions2)
+
+```
 
 ## Acknowledgement
 This code repo modifies the code using the work from https://github.com/BenjaminDoran/LogoPlots.jl.
