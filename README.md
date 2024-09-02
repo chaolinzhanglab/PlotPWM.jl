@@ -134,7 +134,7 @@ to get
 You can do it for crosslinked version as well:
 ```
 highlighted_regions2=[1:5]
-logoplot_with_highlight_crosslink(pfm, background, C, highlighted_regions2)
+logoplot_with_highlight_crosslink(pfm, background, C2, highlighted_regions2)
 ```
 
 ![highlight-pfm](demo/demo5.png)
