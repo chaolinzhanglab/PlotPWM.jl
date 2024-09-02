@@ -46,8 +46,8 @@ end
                    setup_off=false,
                    margin=275Plots.mm,
                    dpi=65,
-                   beta=1.0,
-                   alpha=1.0
+                   alpha=1.0,
+                   beta=1.0
                    )
     if !setup_off
         num_cols = size(data.args[1], 2)

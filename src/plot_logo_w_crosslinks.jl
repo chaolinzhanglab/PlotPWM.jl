@@ -61,16 +61,16 @@ end
                    rna=true, 
                    xaxis=false,
                    yaxis=false,
-                   alpha = 1.0,
-                   left_margin=155Plots.mm,
-                   margin = 275Plots.mm,
-                   ytickfontsize=185,
-                   thickness_scaling=0.05,
-                   setup_off=false,
+                   thickness_scaling=0.0525,
                    logo_x_offset=0.0,
                    logo_y_offset=0.0,
+                   ytickfontsize=265,
+                   setup_off=false,
+                   margin = 275Plots.mm,
+                   dpi=65,
+                   alpha = 1.0,
                    beta=1.0,
-                   dpi=65)
+                   )
     if !setup_off
         num_cols = size(data.args[1], 2)
         logo_size = (_width_factor_(num_cols)*num_cols, 220)
@@ -84,7 +84,7 @@ end
         left_margin --> left_margin
         ytickfontsize --> ytickfontsize
         xtickfontsize --> 145    
-        ytickfont --> font(36, "Helvetica")
+        ytickfont --> font(45, "Helvetica")
         xaxis && (xaxis --> xaxis)
         yaxis && (yaxis --> yaxis)
         legend --> false
