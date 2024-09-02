@@ -11,6 +11,8 @@ include("plot_nothing.jl")
 
 export LogoPlot, 
        LogoPlotWithCrosslink, 
+       logoplot_with_highlight,
+       logoplot_with_highlight_crosslink,
        save_logoplot, 
        save_crosslinked_logoplot,
        NothingLogo
