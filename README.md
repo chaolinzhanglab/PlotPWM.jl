@@ -11,13 +11,21 @@ PlotPWM is a package for plotting [position weight matrices (PWMs)](https://en.w
 
 ## Table of contents
 
-* [Usage](#Usage)  
+* [Usage](#Usage)
+   - [Installation](#Installation)
    - [Plot your typical PWMs](#Plot-your-typical-PWMs)
       - [Save the PWMs](#Save-the-PWMs)
    - [Plot your PWMs with crosslinking tendencies](#Plot-your-PWMs-with-crosslinking-tendencies)
       - [Multiplexed crosslinking tendencies](#Multiplexed-crosslinking-tendencies)
    - [Plot your PWM with highlighted regions](#Plot-your-PWM-with-highlighted-regions)
 <!-- * [Some-definitions](#Some-definitions) -->
+
+
+# Installation
+To install PlotPWM use Julia's package manager:
+```
+pkg> add PlotPWM
+```
 
 # Usage
 
