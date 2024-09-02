@@ -10,11 +10,12 @@
                    setup_off=false,
                    margin=275Plots.mm,
                    dpi=65,
-                   beta=1.0
+                   beta=1.0,
+                   crosslink=false
                    )
     if !setup_off
         num_cols = data.args[1]
-        ylims --> (0, 2)
+        ylims --> (crosslink ? -2 : 0, 2)
         xlims --> (-0.5, num_cols+1)
         logo_size = (_width_factor_(num_cols)*num_cols, 220)
         ticks --> :native

@@ -61,34 +61,41 @@ end
                    rna=true, 
                    xaxis=false,
                    yaxis=false,
+                   alpha = 1.0,
                    left_margin=155Plots.mm,
-                   margin = 225Plots.mm,
+                   margin = 275Plots.mm,
                    ytickfontsize=185,
                    thickness_scaling=0.05,
+                   setup_off=false,
                    logo_x_offset=0.0,
                    logo_y_offset=0.0,
-                   beta=1.0)
-
-    num_cols = size(data.args[1], 2)
-    logo_size = (_width_factor_(num_cols)*num_cols, 220)
-    framestyle --> :zerolines
-    ylims --> (-crosslink_stretch_factor, 2)
-    yticks --> 0:1:2  # Ensure ticks are generated
-    ytickfontcolor --> :gray
-    xtickfontcolor --> :gray
-    xticks --> 1:1:num_cols
-    # margin --> margin
-    left_margin --> left_margin
-    ytickfontsize --> ytickfontsize
-    xtickfontsize --> 145    
-    ytickfont --> font(36, "Helvetica")
-    xaxis && (xaxis --> xaxis)
-    yaxis && (yaxis --> yaxis)
-    legend --> false
-    tickdir --> :in
-    grid --> false
-    thickness_scaling --> thickness_scaling
-    size --> logo_size
+                   beta=1.0,
+                   dpi=65)
+    if !setup_off
+        num_cols = size(data.args[1], 2)
+        logo_size = (_width_factor_(num_cols)*num_cols, 220)
+        framestyle --> :zerolines
+        ylims --> (-crosslink_stretch_factor, 2)
+        yticks --> 0:1:2  # Ensure ticks are generated
+        ytickfontcolor --> :gray
+        xtickfontcolor --> :gray
+        xticks --> 1:1:num_cols
+        # margin --> margin
+        left_margin --> left_margin
+        ytickfontsize --> ytickfontsize
+        xtickfontsize --> 145    
+        ytickfont --> font(36, "Helvetica")
+        xaxis && (xaxis --> xaxis)
+        yaxis && (yaxis --> yaxis)
+        legend --> false
+        margin --> margin
+        tickdir --> :in
+        grid --> false
+        thickness_scaling --> thickness_scaling
+        size --> logo_size
+    end
+    dpi --> dpi
+    alpha --> alpha
     pfm = data.args[1]
     background = data.args[2]
     crosslink_mat = data.args[3]
@@ -107,11 +114,57 @@ end
     end
 end
 
+function logoplot_with_highlight_crosslink(
+        pfm,
+        background, 
+        c, 
+        highlighted_regions::Vector{UnitRange{Int}};
+        dpi = 65,
+        alpha = _alpha_
+    )
+    check_highlighted_regions(highlighted_regions)
+    num_columns, range_complement = 
+        get_numcols_and_range_complement(pfm, highlighted_regions)
+
+    @info "num_columns: $num_columns, range_complement: $range_complement"
+
+    p = nothinglogo(num_columns; crosslink=true)
+    for r in range_complement
+        logo_x_offset = r.start - 1
+        logoplotwithcrosslink!(p, 
+                    (@view pfm[:, r]), background, (@view c[:, r]);
+                    alpha=alpha,
+                    dpi=dpi,
+                    setup_off=true,
+                    logo_x_offset=logo_x_offset)
+    end
+    for r in highlighted_regions
+        logo_x_offset = r.start - 1
+        logoplotwithcrosslink!(p, 
+                    (@view pfm[:, r]), background, (@view c[:, r]);
+                    dpi=dpi,
+                    setup_off=true,
+                    logo_x_offset=logo_x_offset)
+    end
+    return p
+end
+
+function logoplot_with_highlight_crosslink(
+        pfm::AbstractMatrix,
+        c::AbstractMatrix,
+        highlighted_regions::Vector{UnitRange{Int}})
+    return logoplot_with_highlight_crosslink(pfm, 
+                                             default_genomic_background, 
+                                             c, 
+                                             highlighted_regions)
+end
+
+
 """
     save_crosslinked_logoplot(pfm, background, c, save_name; dpi=65, rna=true)
     Save a logoplot with crosslinks to a file
 """
-function save_crosslinked_logoplot(pfm, background, c, save_name; dpi=65, rna=true)
+function save_crosslinked_logoplot(pfm, background, c, save_name; dpi=65, rna=true, highlighted_regions=nothing)
     @assert all(sum(pfm, dims=1) .≈ 1) "pfm must be a probability matrix"
     @assert length(background) == 4 "background must be a vector of length 4"
     @assert all(0 .≤ background .≤ 1) "background must be a vector of probabilities"
@@ -119,11 +172,14 @@ function save_crosslinked_logoplot(pfm, background, c, save_name; dpi=65, rna=tr
     @assert length(c) == size(pfm, 2) "C must be a vector of length equal to the number of columns in pfm"
     @assert all(0 .≤ c .≤ 1) "C must be a vector of probabilities"
     @assert sum(c) ≤ 1 "The sum of C must be less than or equal 1"
-    p = logoplotwithcrosslink(pfm, background, c; dpi=dpi, rna=rna)
+    if isnothing(highlighted_regions)
+        p = logoplotwithcrosslink(pfm, background, c; dpi=dpi, rna=rna)
+    else
+        p = logoplot_with_highlight_crosslink(pfm, background, c, highlighted_regions; dpi=dpi)
+    end
     savefig(p, save_name)
 end
 
-function save_crosslinked_logoplot(pfm, c, save_name; dpi=65, rna=true)
-    p = logoplotwithcrosslink(pfm, default_genomic_background, c; dpi=dpi, rna=rna)
-    savefig(p, save_name)
+function save_crosslinked_logoplot(pfm, c, save_name; dpi=65, rna=true, highlighted_regions=nothing)
+    save_crosslinked_logoplot(pfm, default_genomic_background, c, save_name; dpi=dpi, rna=rna, highlighted_regions=highlighted_regions)
 end

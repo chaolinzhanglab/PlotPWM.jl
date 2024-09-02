@@ -45,7 +45,7 @@ end
                    ytickfontsize=265,
                    setup_off=false,
                    margin=275Plots.mm,
-                   dpi=300,
+                   dpi=65,
                    beta=1.0,
                    alpha=1.0
                    )
@@ -94,13 +94,27 @@ end
 end
 
 # check if there's any overlap in the highlighted region
-function chk_overlap(highlighted_regions::Vector{UnitRange{T}}) where T <: Integer
+function chk_overlap(highlighted_regions::Vector{UnitRange{Int}})
     for i in 1:length(highlighted_regions)-1
         if is_overlapping(highlighted_regions[i], highlighted_regions[i+1])
             return true
         end
     end
     return false
+end
+
+
+function check_highlighted_regions(highlighted_regions::Vector{UnitRange{Int}}) 
+    if length(highlighted_regions) > 1
+        @assert !chk_overlap(highlighted_regions) "highlighted_regions shouldn't be overlapping"
+    end
+end
+
+function get_numcols_and_range_complement(pfm,
+         highlighted_regions::Vector{UnitRange{Int}})
+    num_cols = size(pfm, 2)
+    range_complement = complement_ranges(highlighted_regions, num_cols)
+    return num_cols, range_complement
 end
 
 # plot the logo with highlight
@@ -112,12 +126,11 @@ function logoplot_with_highlight(
         alpha = _alpha_
     )
 
-    if length(highlighted_regions) > 1
-        @assert !chk_overlap(highlighted_regions) "highlighted_regions shouldn't be overlapping"
-    end
+    check_highlighted_regions(highlighted_regions)
     
-    num_columns = size(pfm, 2)
-    range_complement = complement_ranges(highlighted_regions, num_columns)
+    num_columns, range_complement = 
+        get_numcols_and_range_complement(pfm, highlighted_regions)
+
     p = nothinglogo(num_columns);
     for r in range_complement
         logo_x_offset = r.start-1
