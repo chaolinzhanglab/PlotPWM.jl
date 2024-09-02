@@ -150,4 +150,4 @@ logoplot_with_highlight_crosslink(pfm, background, C2, highlighted_regions2)
 save_crosslinked_logoplot(pfm, C, "tmp.png"; highlighted_regions=highlighted_regions2) -->
 
 ## Acknowledgement
-This code repo modifies the code using the work from https://github.com/BenjaminDoran/LogoPlots.jl.
+This code repo modifies some of the code using the work from https://github.com/BenjaminDoran/LogoPlots.jl.
