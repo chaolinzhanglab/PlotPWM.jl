@@ -48,6 +48,8 @@ end
                    )
     if !setup_off
         num_cols = size(data.args[1], 2)
+        @info "num_cols: $num_cols"
+        xticks --> 1:1:num_cols # xticks needs to be placed here to avoid fractional xticks? weird
         ylims --> (0, ylim_max)
         xlims --> (xlim_min, num_cols+1)
         logo_size = (_width_factor_(num_cols)*num_cols, logo_height)
@@ -59,13 +61,13 @@ end
         yminorticks --> yminorticks
         ytickfont --> font(logo_font_size, logo_font)
         xtickfontcolor --> :gray
-        xticks --> 1:1:num_cols
         xtickfontsize --> xtickfontsize
         xaxis && (xaxis --> xaxis)
         yaxis && (yaxis --> yaxis)
         legend --> false
         tickdir --> :out
         grid --> false
+        dtick--> 10
         margin --> margin
         thickness_scaling --> thickness_scaling
         size --> logo_size
