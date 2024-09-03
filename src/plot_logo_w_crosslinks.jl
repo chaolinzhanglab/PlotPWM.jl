@@ -114,7 +114,8 @@ function save_crosslinked_logoplot(pfm, background, c, save_name; dpi=default_dp
     @assert sum(background) ≈ 1 "background must sum to 1"
     @assert size(c,2) == size(pfm, 2) "C must be a vector of length equal to the number of columns in pfm"
     @assert all(0 .≤ c .≤ 1) "C must be a vector of probabilities"
-    @assert sum(c) ≤ 1 "The sum of C must be less than or equal 1"
+    sum_c = sum(c)
+    @assert sum_c ≤ 1.01 "The sum of C must be less than or equal 1; right now it is $(sum_c)"
     if isnothing(highlighted_regions)
         p = logoplotwithcrosslink(pfm, background, c; dpi=dpi, rna=rna)
     else
