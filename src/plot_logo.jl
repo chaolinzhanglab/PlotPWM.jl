@@ -80,6 +80,7 @@ end
     coords = freq2xy(pfm; background=background, rna=rna, beta=beta,
                      logo_x_offset=logo_x_offset, 
                      logo_y_offset=logo_y_offset);
+    # @info "coords: $(typeof(coords[1]))"
     for (k, v) in coords
         @series begin
             fill := 0
