@@ -1,17 +1,5 @@
+using Plots
 using PlotPWM
-
-pfm =  [0.02  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
-        0.98  0.0  0.02  0.19  0.0   0.96  0.01  0.89  0.03  0.0
-        0.0   0.0  0.0   0.77  0.01  0.0   0.0   0.0   0.56  0.0
-        0.0   0.0  0.0   0.04  0.99  0.04  0.01  0.11  0.23  0.0]
-
-# C = [0.01  0.04  0.05  0.0  0.74  0.05  0.03  0.05  0.03  0.0] 
-
-background = [0.25, 0.25, 0.25, 0.25]
-
-logoplot(pfm, background)
-
-
 
 ALPHABET_GLYPHS = Dict{String, NamedTuple}(
     "A" => (x = [0.121, 0.123, 0.444, 0.573, 0.883, 0.76, 0.675, 0.669, 0.333, 0.323, 0.238, 0.121, 0.121, 0.369, 0.638, 0.506, 0.502, 0.496, 0.367, 0.369, 0.121], y = [0.005, 0.007, 1.0, 1.0, 0.0, 0.0, 0.289, 0.301, 0.301, 0.277, 0.0, 0.0, 0.005, 0.41, 0.413, 0.85, 0.85, 0.833, 0.413, 0.41, 0.005]),
@@ -79,183 +67,6 @@ ALPHABET_GLYPHS = Dict{String, NamedTuple}(
     "*" => (x = [0.749, 0.749, 0.554, 0.646, 0.603, 0.5, 0.397, 0.354, 0.446, 0.251, 0.251, 0.446, 0.354, 0.397, 0.5, 0.603, 0.646, 0.554, 0.749, 0.749], y = [0.445, 0.555, 0.569, 0.946, 1.001, 0.638, 1.001, 0.946, 0.569, 0.555, 0.445, 0.431, 0.054, -0.001, 0.362, -0.001, 0.054, 0.431, 0.445, 0.555]),
 )
 
-# highlighted_regions=[1:4]
-
-# logoplot_with_highlight_crosslink(pfm, background, C, highlighted_regions)
-# logoplot_with_highlight_crosslink(pfm, C, highlighted_regions)
-
-# logoplot_with_highlight_crosslink(pfm, background, C, highlighted_regions1)
-# highlighted_regions1
-# highlighted_regions2
-
-
-# logoplotwithcrosslink(pfm, background, C; rna=true)
-
-# highlighted_regions=[1:5]
-
-# save_crosslinked_logoplot(pfm, background, C, "tmp.png"; 
-#     rna=true, highlighted_regions=highlighted_regions)
-
-
-# logoplot(pfm)
-
-# logoplot(zeros((4,20)))
-# logoplot!(pfm, logo_x_offset=2, setup_off=true)
-
-# nothinglogo(20)
-# logoplot!(pfm, logo_x_offset=2, setup_off=true, alpha=0.5)
-
-
-
-# pfm |> size
-
-
-# q = [1:3, 5:9, 15:20]
-# complement_ranges(q, 25)
-
-# qq = setdiff(collect(1:13), reduce(union, (collect.(q))))
-# qq = [4,7, 10,11,12]
-# group_to_ranges(qq)
-
-
-# function logoplot_with_highlight(
-#         pfm::AbstractMatrix, 
-#         background::AbstractMatrix, 
-#         highlighted_regions::Vector{UnitRange{Int}}
-#     )
-#     num_columns = size(pfm, 2)
-#     range_complement = complement_ranges(highlighted_regions, num_columns)
-#     p = nothinglogo(num_columns);
-#     for r in range_complement
-#         logo_x_offset = r.start-1
-#         logoplot!(p, 
-#                   (@view pfm[:, r]), background; 
-#                   alpha=0.35, 
-#                   setup_off=true, 
-#                   logo_x_offset=logo_x_offset)
-#     end
-#     for r in highlighted_regions
-#         logo_x_offset = r.start-1
-#         logoplot!(p, (@view pfm[:, r]), background; 
-#                      setup_off=true, 
-#                      logo_x_offset=logo_x_offset)
-#     end
-#     return p
-# end
-
-# function logoplot_with_highlight(
-#         pfm::AbstractMatrix, 
-#         highlighted_regions::Vector{UnitRange{Int}})
-#     return logoplot_with_highlight(pfm, 
-#                                    default_genomic_background, 
-#                                    highlighted_regions)
-# end
-
-
-
-# highlighted_regions=[1:5]
-
-
-#     return max(x1,y1) <= min(x2,y2)
-
-# r = 1:3
-
-# reduce(is_overlapping, highlighted_regions)
-
-
-# !reduce(is_overlapping, [1:5, 3:8])
-# reduce(is_overlapping, [1:5])
-
-
-# p = logoplot_with_highlight(pfm, [0.25 for _ = 1:4], [1:5])
-# p = logoplot_with_highlight(pfm, highlighted_regions)
-# p
-
-
-x = [
-        0.8, 0.3, 0.3, 0.1, 0.3, 0.3, 0.8  # Horizontal line with left-pointing tip
-    ]
-    y = [
-        0.5, 0.5, 0.7, 0.4, 0.1, 0.3, 0.3  # Arrow tip at the left, horizontal body
-    ]
-
-
-    x = [
-        0.8, 0.3, 0.3, 0.1, 0.3, 0.3, 0.8  # Horizontal line with left-pointing tip
-    ]
-    y = [
-        0.45, 0.45, 0.7, 0.4, 0.1, 0.35, 0.35  # Arrow tip at the left, horizontal body
-    ]
-
-
-
-
-x = [
-        0.8, 0.4,  0.4, 0.8  # Adjusted x-coordinates for a smaller arrowhead
-    ]
-    y = [
-        0.45, 0.45, 0.35, 0.35  # Adjusted y-coordinates for a smaller tip
-    ]
-
-
-
-
-# left arrow
-
-x = [
-    0.8, 0.4, 0.4, 0.2, 0.4, 0.4, 0.8  # Adjusted x-coordinates for a smaller arrowhead
-]
-y = [
-    0.45, 0.45, 0.6, 0.4, 0.2, 0.35, 0.35  # Adjusted y-coordinates for a smaller tip
-]
-
-
-# right arrow
- x = [
-        0.2, 0.6, 0.6, 0.8, 0.6, 0.6, 0.2  # Adjusted x-coordinates for the right arrow with a smaller tip
-        ]
-        y = [
-            0.45, 0.45, 0.6, 0.4, 0.2, 0.35, 0.35  # Same y-coordinates as the left arrow
-        ]
-
-
-x = [
-    0.8, 0.6, 0.6, 0.4, 0.6, 0.6, 0.8  # Sharp, defined edges for the arrowhead and a straight body
-]
-y = [
-    0.45, 0.55, 0.65, 0.45, 0.25, 0.35, 0.35  # Symmetrical and sharper head
-]
-
-plot(x, y, seriestype = :shape, fillalpha=0.5, ylim=(0,1), xlim=(0,1), fillcolor=:blue, linecolor=:red)
-
-using Plots
-
-#### 
-x_arrow = [
-    0.8, 0.6, 0.6, 0.4, 0.6, 0.6, 0.8
-]
-y_arrow = [
-    0.45, 0.55, 0.65, 0.45, 0.25, 0.35, 0.35
-]
-
-x_border = [
-    0.82, 0.62, 0.62, 0.42, 0.62, 0.62, 0.82,
-    0.78, 0.58, 0.58, 0.38, 0.58, 0.58, 0.78  # A second set of coordinates to create the border
-]
-y_border = [
-    0.47, 0.57, 0.67, 0.47, 0.27, 0.37, 0.37,
-    0.48, 0.57, 0.67, 0.48, 0.27, 0.37, 0.48  # A second set of coordinates for the border
-]
-
-
-
-plot(x_arrow, y_arrow, seriestype = :shape, fillalpha=0.5, ylim=(0,1), xlim=(0,1), fillcolor=:red, linecolor=:red)
-plot!(x_border, y_border, fillalpha=0.5, ylim=(0,1), xlim=(0,1), fillcolor=:red, linecolor=:red)
-
-
-
-######
-
 
 mutable struct shape
     x::Vector{Float64}
@@ -282,11 +93,16 @@ function get_arrow_basic(;line_scale=1.0, right=true, x_offset=0.0)
     end
 end
 
-get_right_most_point(_shape_::shape) = maximum(_shape_.x)
-get_bottom_tip(_shape_::shape) = minimum(_shape_.y)
+
 shift_up(_shape_::shape, by::Float64) = shape(_shape_.x, _shape_.y .+ by)
+shift_up(coords::Vector{shape}, by::Float64) = shape.(coords, by)
+
 shift_right(_shape_::shape, by::Float64) = shape(_shape_.x .+ by, _shape_.y)
+shift_right(coords::Vector{shape}, by::Float64) = shape.(coords, by)
+
 shift_left(_shape_::shape, by::Float64) = shape(_shape_.x .- by, _shape_.y)
+shift_left(coords::Vector{shape}, by::Float64) = shape.(coords, by)
+
 get_xy(_shape_::shape) = (_shape_.x, _shape_.y)
 
 function scale_shape(scale, _shape_::shape; left_aligned=true)
@@ -297,10 +113,16 @@ function scale_shape(scale, _shape_::shape; left_aligned=true)
     return shape(x , y .- min_y)
 end
 
-function two_adjusted_glyphs(ALPHABET_GLYPHS_i)
-    mult_by_2_x = 8 .* ALPHABET_GLYPHS_i.x
-    min_x = minimum(mult_by_2_x)
-    return shape(mult_by_2_x .- min_x, ALPHABET_GLYPHS_i.y .+ 0.5)
+
+
+
+
+function two_adjusted_glyphs(ALPHABET_GLYPHS_i; stretch_x=8.0)
+    x = stretch_x .* (ALPHABET_GLYPHS_i.x .- minimum(ALPHABET_GLYPHS_i.x))
+
+    # mult_by_2_x = 36 .* ALPHABET_GLYPHS_i.x
+    # min_x = minimum(mult_by_2_x)
+    return shape(x, ALPHABET_GLYPHS_i.y .+ 0.5)
 end
 
 function adjust_glyphs_up_by(ALPHABET_GLYPHS_i; by=0.5)
@@ -314,6 +136,10 @@ GLYPHS_2_adjusted = merge(
          "p"=> two_adjusted_glyphs(ALPHABET_GLYPHS["p"])) # b and p
 )
 
+
+
+
+
 q = [1,7,"b","p"]
 coords = shape[];
 k = 0.0
@@ -322,137 +148,93 @@ for i in q
     k += 4 
 end
 
-arrow_space = 0.5
+arrow_space = 1.0
 k += arrow_space
-push!(coords, shift_right(get_arrow_basic(;line_scale=3.0), k))
-push!(coords, shift_left(get_arrow_basic(;line_scale=3.0, right=false), arrow_space))
-
-plot(coords[1].x, coords[1].y, seriestype = :shape, fillalpha=0.5, ylim=(0,2), xlim=(-32,32), 
-    legends=false,
-    size=(PlotPWM._width_factor_(12)*12, 220), fillcolor=:darkgray, linecolor=:black)
-plot!(coords[2].x, coords[2].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
-plot!(coords[3].x, coords[3].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
-plot!(coords[4].x, coords[4].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
-plot!(coords[5].x, coords[5].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
-plot!(coords[6].x, coords[6].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
+push!(coords, shift_right(get_arrow_basic(;line_scale=1.0), k))
+push!(coords, shift_left(get_arrow_basic(;line_scale=1.0, right=false), arrow_space))
 
 
-scale_shape(2.0, coords[2]).x
-
-coords_s = scale_shape.(0.25, coords);
-
-plot(coords_s[1].x, coords_s[1].y, seriestype = :shape, fillalpha=0.5, ylim=(0,2), xlim=(-32,41), 
-    legends=false,
-    size=(PlotPWM._width_factor_(12)*12, 220), fillcolor=:darkgray, linecolor=:black)
-plot!(coords_s[2].x, coords_s[2].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
-plot!(coords_s[3].x, coords_s[3].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
-plot!(coords_s[4].x, coords_s[4].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
-plot!(coords_s[5].x, coords_s[5].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
-plot!(coords_s[6].x, coords_s[6].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
+plt2chk(coords; xlim=(-10,25))
 
 
 
+get_right_most_point(_shape_::shape) = maximum(_shape_.x)
+get_right_most_point(coords::Vector{shape}) = maximum(get_right_most_point.(coords))
+get_left_most_point(_shape_::shape) = minimum(_shape_.x)
+get_left_most_point(coords::Vector{shape}) = minimum(get_left_most_point.(coords))
 
-using PlotPWM
+get_top_most_point(_shape_::shape) = maximum(_shape_.y)
+get_top_most_point(coords::Vector{shape}) = maximum(get_top_most_point.(coords))
+get_bottom_most_point(_shape_::shape) = minimum(_shape_.y)
+get_bottom_most_point(coords::Vector{shape}) = minimum(get_bottom_most_point.(coords))
 
-x,y = scale_shape(2.0, get_arrow_basic(;right=false); left_aligned=false) |> get_xy
-x,y = get_arrow_basic(;right=false) |> get_xy
-plot(x, y, seriestype = :shape, fillalpha=0.5, ylim=(0,4), xlim=(-8,8), fillcolor=:darkgray, linecolor=:black)
+x_substract!(_shape_::shape, a) = begin _shape_.x .= _shape_.x .- a end
+x_divide!(_shape_::shape, a) = begin 
+    @assert a != 0.0 "a cannot be zero"
+    _shape_.x .= _shape_.x ./ a 
+end
+x_multiply!(_shape_::shape, a) = begin _shape_.x .= _shape_.x .* a end
 
-
-
-
-
-
-arrow = get_right_arrow_basic()
-arrow_5 = scale_shape(0.5, arrow)
-
-plot(arrow.x, arrow.y, seriestype = :shape, fillalpha=0.5, ylim=(0,4), xlim=(-4,4), fillcolor=:darkgray, linecolor=:black)
-plot(arrow_5.x, arrow_5.y, seriestype = :shape, fillalpha=0.5, ylim=(0,1), xlim=(-4,4), fillcolor=:darkgray, linecolor=:black)
-
-
-
-# Annotate with Helvetica font, custom font size, color, and alignment
-annotate!(0.9, 0.4, text("mytext", 15, :black, halign = :center))
-
-
-
-
-
-which_one = "1"
-which_one2 = "7"
+y_substract!(_shape_::shape, a) = begin _shape_.y .= _shape_.y .- a end
+y_add!(_shape_::shape, a) = begin _shape_.y .= _shape_.y .+ a end
+y_divide!(_shape_::shape, a) = begin 
+    @assert a != 0.0 "a cannot be zero"
+    _shape_.y .= _shape_.y ./ a 
+end
+y_multiply!(_shape_::shape, a) = begin _shape_.y .= _shape_.y .* a end
 
 
-s=["$i" for i = 1:9]
+function scale_height!(coords::Vector{shape}, height; in_range=(0.0, 2.0))
+    top_most_pt = get_top_most_point(coords)
+    bottom_most_pt = get_bottom_most_point(coords)
+    y_substract!.(coords, bottom_most_pt)
+    y_divide!.(coords, top_most_pt - bottom_most_pt)
+    y_multiply!.(coords, height)
+    # translate back to y center
+    orig_height = top_most_pt - bottom_most_pt
+    scale_factor = height / orig_height
+    # move to the center y in the range of (0,2) according to the previous scale
+    # assumed it was centered before
+    in_range_middle = (in_range[2] - in_range[1]) / 2
+    add_up = in_range_middle - (orig_height * scale_factor) / 2
+    y_add!.(coords, add_up)
+end
 
-nums= [ALPHABET_GLYPHS[i] for i in s]
+function scale_width!(coords::Vector{shape}, width) 
+    right_most_pt = get_right_most_point(coords)
+    left_most_pt = get_left_most_point(coords)
+    x_substract!.(coords, left_most_pt)
+    x_divide!.(coords, right_most_pt - left_most_pt)
+    x_multiply!.(coords, width)
+end
 
-maximum(ALPHABET_GLYPHS["b"].x) - minimum(ALPHABET_GLYPHS["b"].x)
-maximum(ALPHABET_GLYPHS["p"].x) - minimum(ALPHABET_GLYPHS["p"].x)
+width = 5.0
 
+coords = scale_width(coords, 10.0)
+plt2chk(coords; xlim=(-80,200))
 
-[maximum(nums[i].x)-minimum(nums[i].x) for i in 1:9]
+scale_width!(coords, 10.0)
+plt2chk(coords; xlim=(-0,25))
 
-
-x, y = 0.5 .* (ALPHABET_GLYPHS[which_one].x, ALPHABET_GLYPHS[which_one].y)
-plot(x, y, seriestype = :shape, fillalpha=0.5, xlim=(0,2), ylim=(0,2),  fillcolor=:darkgray, linecolor=:black)
-
-
-x2, y2 = (2 .* (ALPHABET_GLYPHS[which_one2].x, ALPHABET_GLYPHS[which_one2].y))
-plot(x2, y2, seriestype = :shape, fillalpha=0.5,  fillcolor=:darkgray, linecolor=:black)
-
-
-
-
-a1 = GLYPHS_2_adjusted["1"]
-a2 = GLYPHS_2_adjusted["7"]
-b1 = GLYPHS_2_adjusted["b"]
-b2 = GLYPHS_2_adjusted["p"]
-
-
-
-
-# a1x, a1y = a1.x .- 1.2, a1.y
-# a2x, a2y = a2.x .- 0.8, a2.y
-# b1x, b1y = b1.x .- 0.25, b1.y
-# b2x, b2y = b2.x .+ 0.2, b2.y
-
-a1x, a1y = a1.x , a1.y
-a2x, a2y = a2.x , a2.y
-b1x, b1y = b1.x , b1.y
-b2x, b2y = b2.x , b2.y
-
-factor_here = 0.5
-
-plot(  factor_here .* (a1x )       , factor_here .* a1y, seriestype = :shape, fillalpha=0.5, xlim=(-2,5), ylim=(-2,2),  fillcolor=:darkgray, linecolor=:black)
-plot!( factor_here .* (a2x .+ 0.8) , factor_here .* a2y, seriestype = :shape, fillalpha=0.5,  fillcolor=:darkgray, linecolor=:black)
-plot!( factor_here .* (b1x .+ 1.6) , factor_here .* b1y, seriestype = :shape, fillalpha=0.5,  fillcolor=:darkgray, linecolor=:black)
-plot!( factor_here .* (b2x .+ 2.4) , factor_here .* b2y, seriestype = :shape, fillalpha=0.5,  fillcolor=:darkgray, linecolor=:black)
-
-factor_here = 0.5
-
-plot!( factor_here .* (a1x     ),   factor_here .* a1y, seriestype = :shape, fillalpha=0.5, xlim=(-2,5), ylim=(0,2),  fillcolor=:darkgray, linecolor=:black)
-plot!( factor_here .* (a2x .+ 0.4), factor_here .* a2y, seriestype = :shape, fillalpha=0.5,  fillcolor=:darkgray, linecolor=:black)
-plot!( factor_here .* (b1x .+ 0.9), factor_here .* b1y, seriestype = :shape, fillalpha=0.5,  fillcolor=:darkgray, linecolor=:black)
-plot!( factor_here .* (b2x .+ 1.3), factor_here .* b2y, seriestype = :shape, fillalpha=0.5,  fillcolor=:darkgray, linecolor=:black)
-
-
-xa = 2.0 .* a1x
-
-minimum(xa)
+plt2chk(coords; xlim=(-60,120), ylim=(-0,2), arr_ratio=0.5)
+plt2chk(coords; xlim=(-15,32), ylim=(-0,2), arr_ratio=0.5)
+plt2chk(coords; xlim=(0,15), ylim=(-0,2), arr_ratio=0.5)
 
 
 
+function plt2chk(coords; xlim=(-60,60), ylim=(-0,2), arr_ratio=0.5)
+    _coords_ = deepcopy(coords)
+    total_width = xlim[2] - xlim[1] + 1
+    adjusted_width = arr_ratio * total_width
+    scale_width!(_coords_, adjusted_width)
+    scale_height!(_coords_, arr_ratio * 1.0)
 
-
-two_adjusted_glyphs(ALPHABET_GLYPHS["b"])
-
-x=two_adjusted_glyphs(ALPHABET_GLYPHS["1"].x)
-
-map(q -> (x=two_adjusted_glyphs(q.x), y=q.y), ALPHABET_GLYPHS["1"])
-
-
-
-plot(x, y, seriestype = :shape, fillalpha=0.5, xlim=(0,1), ylim=(0,1),  fillcolor=:darkgray, linecolor=:black)
-
-
+    plot(_coords_[1].x, _coords_[1].y, seriestype = :shape, fillalpha=0.5, ylim=ylim, xlim=xlim, 
+        legends=false,
+        size=(PlotPWM._width_factor_(12)*12, 220), fillcolor=:darkgray, linecolor=:black)
+    plot!(_coords_[2].x, _coords_[2].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
+    plot!(_coords_[3].x, _coords_[3].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
+    plot!(_coords_[4].x, _coords_[4].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
+    plot!(_coords_[5].x, _coords_[5].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
+    plot!(_coords_[6].x, _coords_[6].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
+end
