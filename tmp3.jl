@@ -132,6 +132,8 @@ shift_left(_shape_::shape, a)   = shape(_shape_.x .- a, _shape_.y)
 shift_up(_shape_::shape, a)     = shape(_shape_.x, _shape_.y .+ a)
 shift_down(_shape_::shape, a)   = shape(_shape_.x, _shape_.y .- a)
 
+Base.copy(_shape_::shape) = shape(copy(_shape_.x), copy(_shape_.y))
+
 #=
 minmax normalize y and returns the 
 original top_most_pt and bottom_most_pt of the shape
@@ -212,7 +214,8 @@ function make_in_between_basic(num_bt::Int;
     coords = shape[];
     k = 0.0
     for i in in_bt_str
-        push!(coords, shift_right(GLYPHS_2_adjusted["$i"], k))
+        g = copy(GLYPHS_2_adjusted["$i"])
+        push!(coords, shift_right(g, k))
         k += word_increment
     end
 
@@ -247,13 +250,21 @@ end
 
 
 
-coords = make_in_between_basic(12; arrow_line_scale=1.25)
+coords = make_in_between_basic(11; arrow_line_scale=1.25)
+scale_width!(coords, 2.0)
+
+y_substract!.(coords, 0.5)
+
+coords[1].y[1] = 22
+coords[1].y
+coords[2].y
+y_substract!(coords, 0.5)
+
+min_max_normalize_y!(coords)
 
 plt2chk(coords; xlim=(0.0, 2.0))
 
 
-scale_width!(coords, 2.0)
 
-# min_max_normalize_y!(coords)
 
 scale_height!(coords, 0.5)
