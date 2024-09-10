@@ -68,96 +68,15 @@ ALPHABET_GLYPHS = Dict{String, NamedTuple}(
 )
 
 
+
+
+
 mutable struct shape
     x::Vector{Float64}
     y::Vector{Float64}
 end
 
-function get_arrow_basic(;line_scale=1.0, right=true, x_offset=0.0)
-    #=
-        the horizontal line 
-            --------
-            --------
-        part of the arrow (before the arrow head)
-
-        x_offset:
-            positive: shift to the right
-            negative: shift to the left
-    =#
-    arrow_line_width = line_scale * 4.0
-    x = [0.0, arrow_line_width, arrow_line_width, line_scale *7.5, arrow_line_width, arrow_line_width, 0.0] .+ x_offset
-    y = [1.1, 1.1, 1.3, 1.0, 0.7, 0.9, 0.9 ]
-    if right shape(x,y)
-    else
-        shape(-x, y)
-    end
-end
-
-
-shift_up(_shape_::shape, by::Float64) = shape(_shape_.x, _shape_.y .+ by)
-shift_up(coords::Vector{shape}, by::Float64) = shape.(coords, by)
-
-shift_right(_shape_::shape, by::Float64) = shape(_shape_.x .+ by, _shape_.y)
-shift_right(coords::Vector{shape}, by::Float64) = shape.(coords, by)
-
-shift_left(_shape_::shape, by::Float64) = shape(_shape_.x .- by, _shape_.y)
-shift_left(coords::Vector{shape}, by::Float64) = shape.(coords, by)
-
-get_xy(_shape_::shape) = (_shape_.x, _shape_.y)
-
-function scale_shape(scale, _shape_::shape; left_aligned=true)
-    x =  _shape_.x 
-    y = scale .* _shape_.y
-    min_x = left_aligned ? minimum(x) : maximum(x)
-    min_y = minimum(y) - scale * get_bottom_tip(_shape_)
-    return shape(x , y .- min_y)
-end
-
-
-
-
-
-function two_adjusted_glyphs(ALPHABET_GLYPHS_i; stretch_x=8.0)
-    x = stretch_x .* (ALPHABET_GLYPHS_i.x .- minimum(ALPHABET_GLYPHS_i.x))
-
-    # mult_by_2_x = 36 .* ALPHABET_GLYPHS_i.x
-    # min_x = minimum(mult_by_2_x)
-    return shape(x, ALPHABET_GLYPHS_i.y .+ 0.5)
-end
-
-function adjust_glyphs_up_by(ALPHABET_GLYPHS_i; by=0.5)
-    return shape(6 .* ALPHABET_GLYPHS_i.x, ALPHABET_GLYPHS_i.y .+ by)
-end
-
-
-GLYPHS_2_adjusted = merge(
-    Dict("$i" => two_adjusted_glyphs(ALPHABET_GLYPHS["$i"]) for i = 0:9), # 0-9
-    Dict("b"=> two_adjusted_glyphs(ALPHABET_GLYPHS["b"]), 
-         "p"=> two_adjusted_glyphs(ALPHABET_GLYPHS["p"])) # b and p
-)
-
-
-
-
-
-q = [1,7,"b","p"]
-coords = shape[];
-k = 0.0
-for i in q
-    push!(coords, shift_right(GLYPHS_2_adjusted["$i"], k))
-    k += 4 
-end
-
-arrow_space = 1.0
-k += arrow_space
-push!(coords, shift_right(get_arrow_basic(;line_scale=1.0), k))
-push!(coords, shift_left(get_arrow_basic(;line_scale=1.0, right=false), arrow_space))
-
-
-plt2chk(coords; xlim=(-10,25))
-
-
-
+#### helpers #####
 get_right_most_point(_shape_::shape) = maximum(_shape_.x)
 get_right_most_point(coords::Vector{shape}) = maximum(get_right_most_point.(coords))
 get_left_most_point(_shape_::shape) = minimum(_shape_.x)
@@ -169,6 +88,7 @@ get_bottom_most_point(_shape_::shape) = minimum(_shape_.y)
 get_bottom_most_point(coords::Vector{shape}) = minimum(get_bottom_most_point.(coords))
 
 x_substract!(_shape_::shape, a) = begin _shape_.x .= _shape_.x .- a end
+x_add!(_shape_::shape, a) = begin _shape_.x .= _shape_.x .+ a end
 x_divide!(_shape_::shape, a) = begin 
     @assert a != 0.0 "a cannot be zero"
     _shape_.x .= _shape_.x ./ a 
@@ -188,16 +108,19 @@ function scale_height!(coords::Vector{shape}, height; in_range=(0.0, 2.0))
     top_most_pt = get_top_most_point(coords)
     bottom_most_pt = get_bottom_most_point(coords)
     y_substract!.(coords, bottom_most_pt)
-    y_divide!.(coords, top_most_pt - bottom_most_pt)
-    y_multiply!.(coords, height)
+    # y_divide!.(coords, )
+    y_multiply!.(coords, height / (top_most_pt - bottom_most_pt))
     # translate back to y center
-    orig_height = top_most_pt - bottom_most_pt
-    scale_factor = height / orig_height
+
+    # orig_height = top_most_pt - bottom_most_pt
+    # scale_factor = height / orig_height
+
     # move to the center y in the range of (0,2) according to the previous scale
     # assumed it was centered before
-    in_range_middle = (in_range[2] - in_range[1]) / 2
-    add_up = in_range_middle - (orig_height * scale_factor) / 2
-    y_add!.(coords, add_up)
+
+    # in_range_middle = (in_range[2] - in_range[1]) / 2
+    # add_up = in_range_middle - (orig_height * scale_factor) / 2
+    # y_add!.(coords, add_up)
 end
 
 function scale_width!(coords::Vector{shape}, width) 
@@ -207,6 +130,149 @@ function scale_width!(coords::Vector{shape}, width)
     x_divide!.(coords, right_most_pt - left_most_pt)
     x_multiply!.(coords, width)
 end
+
+#=
+    scale_height_by_proportion!(coords::Vector{shape}, proportion; in_range=(0.0, 2.0))
+    scale the height of the shape by the proportion
+        proportion: the proportion to scale the height
+        in_range: the range of the height after scaling
+=#
+function scale_height_by_proportion!(coords::Vector{shape}, proportion; in_range=(0.0, 2.0))
+    @assert 0.0 < proportion < 1.0 "proportion should be in the range of (0,1)"
+    top_most_pt = get_top_most_point(coords)
+    bottom_most_pt = get_bottom_most_point(coords)
+    orig_height = top_most_pt - bottom_most_pt
+
+    right_most_pt = get_right_most_point(coords)
+    left_most_pt = get_left_most_point(coords)
+    orig_width = right_most_pt - left_most_pt
+
+    changed_height = orig_height * proportion
+    changed_width = orig_width * proportion
+
+    scale_width!(coords, changed_width)
+    scale_height!(coords, changed_height; in_range=in_range)
+end
+
+
+#######
+
+
+
+function get_arrow_basic(;line_scale=1.0, right=true, x_offset=0.0)
+    #=
+        the horizontal line 
+            --------
+            --------
+        part of the arrow (before the arrow head)
+
+        x_offset:
+            positive: shift to the right
+            negative: shift to the left
+    =#
+    arrow_line_width = line_scale * 4.0
+    x = [0.0, arrow_line_width, arrow_line_width, line_scale * 7.5, arrow_line_width, arrow_line_width, 0.0] .+ x_offset
+    y = [1.05, 1.05, 1.15, 1.0, 0.85, 0.95, 0.95 ]
+    if right shape(x,y)
+    else
+        shape(-x, y)
+    end
+end
+
+
+shift_up(_shape_::shape, by::Float64) = shape(_shape_.x, _shape_.y .+ by)
+shift_up(coords::Vector{shape}, by::Float64) = shape.(coords, by)
+
+shift_right(_shape_::shape, by::Float64) = shape(_shape_.x .+ by, _shape_.y)
+shift_right(coords::Vector{shape}, by::Float64) = shift_right.(coords, by)
+
+shift_left(_shape_::shape, by::Float64) = shape(_shape_.x .- by, _shape_.y)
+shift_left(coords::Vector{shape}, by::Float64) = shift_left.(coords, by)
+
+get_xy(_shape_::shape) = (_shape_.x, _shape_.y)
+
+function scale_shape(scale, _shape_::shape; left_aligned=true)
+    x =  _shape_.x 
+    y = scale .* _shape_.y
+    min_x = left_aligned ? minimum(x) : maximum(x)
+    min_y = minimum(y) - scale * get_bottom_tip(_shape_)
+    return shape(x , y .- min_y)
+end
+
+
+
+function plt2chk(coords; xlim=(-60,60), ylim=(-0,2), arr_ratio=0.5)
+    _coords_ = deepcopy(coords)
+    total_width = xlim[2] - xlim[1] + 1
+    adjusted_width = arr_ratio * total_width
+    scale_width!(_coords_, adjusted_width)
+    scale_height!(_coords_, arr_ratio * 1.0) # 1.0 is the original height
+    
+    p = nothing
+    for i in eachindex(_coords_)
+        if i == 1
+            p = plot(_coords_[1].x, _coords_[1].y, seriestype = :shape, fillalpha=0.5, ylim=ylim, xlim=xlim, 
+                    legends=false,
+                    size=(PlotPWM._width_factor_(12)*12, 220), fillcolor=:darkgray, linecolor=:black)
+        else
+            plot!(p, _coords_[i].x, _coords_[i].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
+        end
+    end
+    display(p)
+end
+
+
+function two_adjusted_glyphs(ALPHABET_GLYPHS_i; stretch_x=8.0)
+    x = stretch_x .* (ALPHABET_GLYPHS_i.x .- minimum(ALPHABET_GLYPHS_i.x))
+
+    # mult_by_2_x = 36 .* ALPHABET_GLYPHS_i.x
+    # min_x = minimum(mult_by_2_x)
+    return shape(x, ALPHABET_GLYPHS_i.y .+ 0.5)
+end
+
+
+GLYPHS_2_adjusted = merge(
+    Dict("$i" => two_adjusted_glyphs(ALPHABET_GLYPHS["$i"]) for i = 0:9), # 0-9
+    Dict("b"=> two_adjusted_glyphs(ALPHABET_GLYPHS["b"]), 
+         "p"=> two_adjusted_glyphs(ALPHABET_GLYPHS["p"])) # b and p
+)
+
+
+
+function make_in_between_basic(num_bt::Int; bp = ["b","p"], 
+    word_increment=4.0, 
+    arrow_increment=5.0,
+    arrow_line_scale=1.25
+    )
+    in_bt_str = vcat(split("$num_bt", ""), bp) 
+    coords = shape[];
+    k = 0.0
+    for i in in_bt_str
+        push!(coords, shift_right(GLYPHS_2_adjusted["$i"], k))
+        k += word_increment
+    end
+
+    # str_in_bt_proportion = 1.25 / arrow_line_scale
+
+    # cur_width = get_right_most_point(coords)
+    # scale_width!(coords, (arrow_line_scale*cur_width)/2)
+    
+    push!(coords, shift_right(
+            get_arrow_basic(;line_scale=arrow_line_scale), get_right_most_point(coords) + arrow_increment))
+    push!(coords, shift_left(
+            get_arrow_basic(;line_scale=arrow_line_scale, right=false), arrow_increment))
+    
+    return coords            
+    # return shift_right(coords, get_left_most_point(coords) * -1.0)  # left aligned to the origin
+end
+
+num_bt = 42
+
+coords = make_in_between_basic(11; arrow_line_scale=1.25)
+
+plt2chk(coords; xlim=(-25,45))
+
+
 
 width = 5.0
 
@@ -220,21 +286,3 @@ plt2chk(coords; xlim=(-60,120), ylim=(-0,2), arr_ratio=0.5)
 plt2chk(coords; xlim=(-15,32), ylim=(-0,2), arr_ratio=0.5)
 plt2chk(coords; xlim=(0,15), ylim=(-0,2), arr_ratio=0.5)
 
-
-
-function plt2chk(coords; xlim=(-60,60), ylim=(-0,2), arr_ratio=0.5)
-    _coords_ = deepcopy(coords)
-    total_width = xlim[2] - xlim[1] + 1
-    adjusted_width = arr_ratio * total_width
-    scale_width!(_coords_, adjusted_width)
-    scale_height!(_coords_, arr_ratio * 1.0)
-
-    plot(_coords_[1].x, _coords_[1].y, seriestype = :shape, fillalpha=0.5, ylim=ylim, xlim=xlim, 
-        legends=false,
-        size=(PlotPWM._width_factor_(12)*12, 220), fillcolor=:darkgray, linecolor=:black)
-    plot!(_coords_[2].x, _coords_[2].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
-    plot!(_coords_[3].x, _coords_[3].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
-    plot!(_coords_[4].x, _coords_[4].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
-    plot!(_coords_[5].x, _coords_[5].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
-    plot!(_coords_[6].x, _coords_[6].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
-end
