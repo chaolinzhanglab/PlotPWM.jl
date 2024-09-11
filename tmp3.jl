@@ -272,8 +272,8 @@ end
 
 #=
 Initially, coords initlized as Vector{shape}; 
-it lies within the range of 0 and 2 in the y axis
-and lies within the range of 0 to some arbitrary point in the x axis
+    It lies within the range of 0 and 2 in the y axis, 
+    and lies within the range of 0 to some arbitrary point in the x axis
 
 Note: 
     By default, make_in_between_basic makes a logo such that its hieght is in between 0 and 2
@@ -287,6 +287,7 @@ mutable struct coords_matrix
         coords_mat = map(x->make_in_between_basic(x; arrow_line_scale=log(x)), mat)
 
         # TODO use weights to scale the inner height of the arrow-shapes in each column
+            # TODO also needs to translate it upwards (for "shorter" ones)
         # TODO center align each arrow-shape in each column
         # TODO place each column of arrow-shapes in the right positions
         new(coords_mat)
