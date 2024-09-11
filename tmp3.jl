@@ -270,16 +270,30 @@ function plt2chk(coords; xlim=(-60,60), ylim=(-0,2), arr_ratio=0.5)
 end
 
 
+#=
+Initially, coords initlized as Vector{shape}; 
+it lies within the range of 0 and 2 in the y axis
+and lies within the range of 0 to some arbitrary point in the x axis
+
+Note: 
+    By default, make_in_between_basic makes a logo such that its hieght is in between 0 and 2
+=#
 mutable struct coords_matrix
     # each column is a set of arrow-shapes that represented mode of distances between the pfms
-    coords::Matrix{Vector{shape}} # Matrix of arrow-shapes;
+    coords_mat::Matrix{Vector{shape}} # Matrix of arrow-shapes;
 
-    function coords_matrix(mat::Matrix{T}) where T <: Real
+    function coords_matrix(mat::Matrix{T}, weights::AbstractVector) where T <: Real
+        @assert size(mat, 1) == length(weights) "The number of rows in mat should be equal to the length of weights"
+        coords_mat = map(x->make_in_between_basic(x; arrow_line_scale=log(x)), mat)
 
+        # TODO use weights to scale the inner height of the arrow-shapes in each column
+        # TODO center align each arrow-shape in each column
+        # TODO place each column of arrow-shapes in the right positions
+        new(coords_mat)
     end
 end
 
-
+ 
 coords = make_in_between_basic(11; arrow_line_scale=1.25)
 # get_height(coords)
 scale_width!(coords, 45.0)
