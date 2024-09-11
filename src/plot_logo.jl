@@ -36,24 +36,6 @@ end
 
 
 
-@userplot ArrowPlot
-@recipe function f(data::ArrowPlot)
-    coords = data.args[1]
-    color --> :grey
-    for coord in coords
-        for v in coord
-            @series begin
-                fill := 0
-                lw --> 0
-                # label --> k
-                v.x, v.y
-            end
-        end
-    end
-end
-
-
-
 @userplot LogoPlot
 @recipe function f(data::LogoPlot; 
                    rna=false, 
