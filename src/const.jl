@@ -2,6 +2,7 @@
 const _alpha_ = 0.35
 # default_genomic_background
 const default_genomic_background = [0.25 for _ = 1:4]
+const bg = default_genomic_background
 # The maximum length of the crosslinking tendencies
 const crosslink_stretch_factor = 2.0
 

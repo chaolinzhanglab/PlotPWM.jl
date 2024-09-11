@@ -82,6 +82,7 @@ pfm3 =  [0.02  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
          0.0   0.0  0.0   0.77  0.01  0.0   0.0   0.0   0.56  0.0
          0.0   0.0  0.0   0.04  0.99  0.04  0.01  0.11  0.23  0.0]
 
+pfms = [pfm1, pfm2, pfm3]
 
 function get_arrow_basic(;line_scale=1.0, right=true, x_offset=0.0)
     #=
@@ -147,6 +148,7 @@ y_multiply!(_shape_::shape, a) = begin _shape_.y .= _shape_.y .* a end
 y_multiply!(coords::Vector{shape}, a) = y_multiply!.(coords, a)
 
 shift_right(_shape_::shape, a)  = shape(_shape_.x .+ a, _shape_.y)
+shift_right(_shapes_::Vector{shape}, a) = shift_right.(_shapes_, a)
 shift_left(_shape_::shape, a)   = shape(_shape_.x .- a, _shape_.y)
 shift_up(_shape_::shape, a)     = shape(_shape_.x, _shape_.y .+ a)
 shift_down(_shape_::shape, a)   = shape(_shape_.x, _shape_.y .- a)
@@ -180,7 +182,7 @@ function scale_height!(coords::Vector{shape}, scaled_height)
     y_multiply!(coords, scaled_height) # scale the height
     #= translate the shape so that it keeps the 
        same proportional relation to y = 0 and y = 2. =#
-    y_add!(coords, 1.0 - (scaled_height / 2))
+    # y_add!(coords, 1.0 - (scaled_height / 2))
 end
 
 function scale_width!(coords::Vector{shape}, scaled_width) 
@@ -246,7 +248,10 @@ function make_in_between_basic(num_bt::Int;
             get_arrow_basic(;line_scale=arrow_line_scale, right=false), arrow_increment))
     
     # return coords
-    return shift_right.(coords, get_left_most_point(coords) * -1.0)  # left aligned to the origin
+    coords = shift_right.(coords, get_left_most_point(coords) * -1.0)  # left aligned to the origin
+    bottom_most_pt = get_bottom_most_point(coords)
+    y_substract!(coords, bottom_most_pt)
+    return coords
 end
 
 function plt2chk(coords; xlim=(-60,60), ylim=(-0,2), arr_ratio=0.5)
@@ -268,6 +273,21 @@ function plt2chk(coords; xlim=(-60,60), ylim=(-0,2), arr_ratio=0.5)
     end
     display(p)
 end
+
+function plot_shape(_coords_; xlim=(0, 10),  ylim=(0,2))
+    p = nothing
+    for i in eachindex(_coords_)
+        if i == 1
+            p = plot(_coords_[1].x, _coords_[1].y, seriestype = :shape, fillalpha=0.5, ylim=ylim, xlim=xlim, 
+                    legends=false,
+                    size=(PlotPWM._width_factor_(12)*12, 220), fillcolor=:darkgray, linecolor=:black)
+        else
+            plot!(p, _coords_[i].x, _coords_[i].y, seriestype = :shape, fillalpha=0.5, fillcolor=:darkgray, linecolor=:black)
+        end
+    end
+    return p
+end
+
 
 
 #=
@@ -294,14 +314,14 @@ mutable struct coords_matrix
     end
 end
 
- 
+
 coords = make_in_between_basic(11; arrow_line_scale=1.25)
+
 # get_height(coords)
 scale_width!(coords, 45.0)
 
 scale_height!(coords,  2.0)
 scale_height!(coords,  2.0)
-
 scale_width!(coords, 2.0)
 
 y_substract!.(coords, 0.5)
@@ -316,33 +336,148 @@ min_max_normalize_y!(coords)
 plt2chk(coords)
 
 
+######################################
 
-ds = [12 6; 32 6]
+function get_height_increments(scaled_heights)
+    vcat(reverse(cumsum(reverse(scaled_heights)))[2:end], 0)
+end
 
-ds_coords = map(x->make_in_between_basic(x; arrow_line_scale=log(x)), ds)
 
 #=
-get 
-
+num_col_each_col!(coords_mat::Matrix{Vector{shape}}, given_len)
+    coords_mat: Matrix of arrow-shapes
+    given_len: the total length given for all the columns of arrow-shapes
+Note that this function does the following: 
+    1. scale the width of each arrow-shapes
+    2. returns the number of columns for each "column"
 =#
-function max_len_each_col(ds_coords::Matrix{Vector{shape}}, given_len)
-    widths = get_width.(ds_coords)
+
+function num_col_each_col!(coords_mat::Matrix{Vector{shape}}, given_len)
+    widths = get_width.(coords_mat)
     # get the maximum length of each column (set of arrow-shapes)
     max_widths_each_col = maximum(widths, dims=1)
     each_col_ratio = max_widths_each_col ./ sum(max_widths_each_col)
-    num_cols_each = ceil.(given_len .* each_col_ratio)
+    num_cols_each = Int.(ceil.(given_len .* each_col_ratio))
+
+    adjusted_lengths = num_cols_each .* (widths ./ max_widths_each_col)
+    scale_width!.(coords_mat, adjusted_lengths)
+    return num_cols_each
+end
+
+ds_mat = [12 6; 32 6]
+weights = [0.7, 0.3]
+
+coords_mat = map(x->make_in_between_basic(x; arrow_line_scale=log(x)), ds_mat)
+
+# shift heights
+scaled_heights = weights .* 2.0
+scale_height!.(coords_mat, scaled_heights)
+
+# shift the arrow-shapes upwards
+height_increments = get_height_increments(scaled_heights)
+for i in axes(coords_mat, 1)
+    for j in axes(coords_mat, 2)
+        coords_mat[i,j] = shift_up.(coords_mat[i,j], height_increments[i])
+    end
+end
+# scale the width of each arrow-shapes and 
+# get the number of columns for each "column"
+num_cols_each = num_col_each_col!(coords_mat, 10)
+
+function obtain_pfm_regions_and_dstarts(pfms, num_cols_each)
+    pfm_num_cols_each = size.(pfms,2)
+    pfm_starts = Int[]
+    d_starts = Int[]
+    offset = 0
+    for (ind, p_col) in enumerate(pfm_num_cols_each)
+        push!(pfm_starts, offset)
+        offset += p_col
+        if ind ≤ length(num_cols_each)
+            push!(d_starts, offset)
+            offset += num_cols_each[ind]
+        end
+    end
+    return pfm_starts, d_starts
+end
+
+pfm_starts, d_starts = obtain_pfm_regions_and_dstarts(pfms, num_cols_each)
+
+d_starts .+= 1
+# shift right the arrow-shapes
+for (ind, right_inc) in enumerate(d_starts)
+    coords_mat[:,ind] .= shift_right.((coords_mat[:,ind]), right_inc)
+end
+
+total_pfm_cols = size.(pfms,2) |> sum
+total_d_cols = num_cols_each |> sum
+
+p = nothinglogo(total_pfm_cols + total_d_cols);
+
+for (ind, pfm) in enumerate(pfms)
+    logo_x_offset = pfm_starts[ind]
+    logoplot!(p, pfm, PlotPWM.bg; 
+                 dpi=65,
+                 setup_off=true, 
+                 logo_x_offset=logo_x_offset)
+end
+
+
+for col in eachcol(coords_mat)
+    arrowplot!(p, col)
+end
+
+p
+
+
+for r in pfm_regions
+    logo_x_offset = r.start-1
+    logoplot!(p, (@view pfm[:, r]), background; 
+                 dpi=dpi,
+                 setup_off=true, 
+                 logo_x_offset=logo_x_offset)
 end
 
 
 
-scale_height!(coords, 0.5)
 
 
-input_pfms = [pfm1, pfm2, pfm3]
-sum_num_columns(input_pfms) = size.(input_pfms, 2) |> sum
-
-ncols = sum_num_columns(input_pfms)
-given_len = ncols
 
 
-p = nothinglogo(2*ncols)
+
+# plot_shape(coords_mat[1,1]; xlim=(0, 10))
+# plot_shape(coords_mat[2,1]; xlim=(0, 10))
+
+# p1 = plot_shape(coords_mat[1,1]; xlim=(0, 100));
+# p2 = plot_shape(coords_mat[2,1]; xlim=(0, 100));
+# plot(p1)
+# plot!(p2)
+
+# # get the number of columns for each column
+
+# scaled_heights
+
+# sh = [1,5,3]
+
+
+# cumsum(reverse(scaled_heights))
+
+
+
+# plot_shape(coords_mat[1,1]; xlim=(0, 100))
+# plot_shape(coords_mat[2,1]; xlim=(0, 100))
+
+# #=
+# get 
+
+# =#
+
+# scale_height!(coords, 0.5)
+
+# input_pfms = [pfm1, pfm2, pfm3]
+# sum_num_columns(input_pfms) = size.(input_pfms, 2) |> sum
+
+# ncols = sum_num_columns(input_pfms)
+# given_len = ncols
+
+
+# p = nothinglogo(2*ncols)
