@@ -67,6 +67,22 @@ const ALPHABET_GLYPHS = Dict{String, NamedTuple}(
     "*" => (x = [0.749, 0.749, 0.554, 0.646, 0.603, 0.5, 0.397, 0.354, 0.446, 0.251, 0.251, 0.446, 0.354, 0.397, 0.5, 0.603, 0.646, 0.554, 0.749, 0.749], y = [0.445, 0.555, 0.569, 0.946, 1.001, 0.638, 1.001, 0.946, 0.569, 0.555, 0.445, 0.431, 0.054, -0.001, 0.362, -0.001, 0.054, 0.431, 0.445, 0.555]),
 )
 
+pfm1 =  [0.02  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
+         0.98  0.0  0.02  0.19  0.0   0.96  0.01  0.89  0.03  0.0
+         0.0   0.0  0.0   0.77  0.01  0.0   0.0   0.0   0.56  0.0
+         0.0   0.0  0.0   0.04  0.99  0.04  0.01  0.11  0.23  0.0]
+
+pfm2 =  [0.02  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
+         0.98  0.0  0.02  0.19  0.0   0.96  0.01  0.89  0.03  0.0
+         0.0   0.0  0.0   0.77  0.01  0.0   0.0   0.0   0.56  0.0
+         0.0   0.0  0.0   0.04  0.99  0.04  0.01  0.11  0.23  0.0]
+
+pfm3 =  [0.02  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
+         0.98  0.0  0.02  0.19  0.0   0.96  0.01  0.89  0.03  0.0
+         0.0   0.0  0.0   0.77  0.01  0.0   0.0   0.0   0.56  0.0
+         0.0   0.0  0.0   0.04  0.99  0.04  0.01  0.11  0.23  0.0]
+
+
 function get_arrow_basic(;line_scale=1.0, right=true, x_offset=0.0)
     #=
         the horizontal line 
@@ -114,6 +130,9 @@ end
 x_divide!(coords::Vector{shape}, a) = x_divide!.(coords, a)
 x_multiply!(_shape_::shape, a) = begin _shape_.x .= _shape_.x .* a end
 x_multiply!(coords::Vector{shape}, a) = x_multiply!.(coords, a)
+
+get_width(coords::Vector{shape}) = get_right_most_point(coords) - get_left_most_point(coords)
+get_height(coords::Vector{shape}) = get_top_most_point(coords) - get_bottom_most_point(coords)
 
 y_substract!(_shape_::shape, a) = begin _shape_.y .= _shape_.y .- a end
 y_substract!(coords::Vector{shape}, a) = y_substract!.(coords, a)
@@ -199,7 +218,9 @@ function two_adjusted_glyphs(ALPHABET_GLYPHS_i; stretch_x=8.0)
     return shape(x, ALPHABET_GLYPHS_i.y .+ 0.5)
 end
 
-
+#=
+by 
+=#
 function make_in_between_basic(num_bt::Int; 
     word_increment=4.0, 
     arrow_increment=5.0,
@@ -224,16 +245,16 @@ function make_in_between_basic(num_bt::Int;
     push!(coords, shift_left(
             get_arrow_basic(;line_scale=arrow_line_scale, right=false), arrow_increment))
     
-    return coords
-    # return shift_right(coords, get_left_most_point(coords) * -1.0)  # left aligned to the origin
+    # return coords
+    return shift_right.(coords, get_left_most_point(coords) * -1.0)  # left aligned to the origin
 end
 
 function plt2chk(coords; xlim=(-60,60), ylim=(-0,2), arr_ratio=0.5)
     _coords_ = deepcopy(coords)
     total_width = xlim[2] - xlim[1] 
     adjusted_width = arr_ratio * total_width
-    scale_width!(_coords_, adjusted_width)
-    scale_height!(_coords_, arr_ratio * 1.0) # 1.0 is the original height
+    # scale_width!(_coords_, adjusted_width)
+    # scale_height!(_coords_, arr_ratio * 1.0) # 1.0 is the original height
     
     p = nothing
     for i in eachindex(_coords_)
@@ -249,8 +270,23 @@ function plt2chk(coords; xlim=(-60,60), ylim=(-0,2), arr_ratio=0.5)
 end
 
 
+mutable struct coords_matrix
+    # each column is a set of arrow-shapes that represented mode of distances between the pfms
+    coords::Matrix{Vector{shape}} # Matrix of arrow-shapes;
+
+    function coords_matrix(mat::Matrix{T}) where T <: Real
+
+    end
+end
+
 
 coords = make_in_between_basic(11; arrow_line_scale=1.25)
+# get_height(coords)
+scale_width!(coords, 45.0)
+
+scale_height!(coords,  2.0)
+scale_height!(coords,  2.0)
+
 scale_width!(coords, 2.0)
 
 y_substract!.(coords, 0.5)
@@ -262,9 +298,36 @@ y_substract!(coords, 0.5)
 
 min_max_normalize_y!(coords)
 
-plt2chk(coords; xlim=(0.0, 2.0))
+plt2chk(coords)
 
+
+
+ds = [12 6; 32 6]
+
+ds_coords = map(x->make_in_between_basic(x; arrow_line_scale=log(x)), ds)
+
+#=
+get 
+
+=#
+function max_len_each_col(ds_coords::Matrix{Vector{shape}}, given_len)
+    widths = get_width.(ds_coords)
+    # get the maximum length of each column (set of arrow-shapes)
+    max_widths_each_col = maximum(widths, dims=1)
+    each_col_ratio = max_widths_each_col ./ sum(max_widths_each_col)
+    num_cols_each = ceil.(given_len .* each_col_ratio)
+end
 
 
 
 scale_height!(coords, 0.5)
+
+
+input_pfms = [pfm1, pfm2, pfm3]
+sum_num_columns(input_pfms) = size.(input_pfms, 2) |> sum
+
+ncols = sum_num_columns(input_pfms)
+given_len = ncols
+
+
+p = nothinglogo(2*ncols)
