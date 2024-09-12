@@ -8,9 +8,11 @@
                    setup_off=false,
                    beta=1.0,
                    dpi=65,
-                   crosslink=false
+                   crosslink=false,
+                   xaxis_on=true,
                    )
     if !setup_off
+        xaxis --> xaxis_on
         num_cols = data.args[1]
         ylims --> (crosslink ? -crosslink_stretch_factor : 0, ylim_max)
         xlims --> (xlim_min, num_cols+1)

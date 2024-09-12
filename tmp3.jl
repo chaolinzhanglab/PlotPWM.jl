@@ -174,6 +174,10 @@ pfms = [pfm1, pfm2, pfm3]
 ds_mats = Float64.([12 6; 32 6; 35 14; 356 4])
 weights = [0.3, 0.2, 0.3, 0.2]
 
+ds_mats = [12 6; 32 6; 235 14]
+weights = [0.5, 0.2, 0.3]
+
+
 p = logoplot_with_arrow_gaps(pfms, ds_mats, weights)
 
 

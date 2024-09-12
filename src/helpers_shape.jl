@@ -15,7 +15,7 @@ function get_arrow_basic(;line_scale=1.0, right=true, x_offset=0.0)
             negative: shift to the left
     =#
     arrow_line_width = line_scale * 4.0
-    x = [0.0, arrow_line_width, arrow_line_width, line_scale * 7.5, arrow_line_width, arrow_line_width, 0.0] .+ x_offset
+    x = [0.0, arrow_line_width, arrow_line_width, line_scale * 5.5, arrow_line_width, arrow_line_width, 0.0] .+ x_offset
     y = [1.05, 1.05, 1.15, 1.0, 0.85, 0.95, 0.95 ]
     if right 
         return shape(x,y)
@@ -225,7 +225,7 @@ end
 
 function make_arrow_shapes(ds_mats, weights, dist_cols::Int, pfms; 
     arrow_shape_scale_ratio=0.8, height_top=2.0)
-    coords_mat = map(x->make_in_between_basic(x; arrow_line_scale=1.0), ds_mats)
+    coords_mat = map(x->make_in_between_basic(x; arrow_line_scale=0.25*log(x)), ds_mats)
     # scale the width of each arrow-shapes and 
     # get the number of columns for each "column"
     num_cols_each = num_col_each_col!(coords_mat, dist_cols)

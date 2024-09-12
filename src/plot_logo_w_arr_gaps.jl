@@ -2,7 +2,6 @@
 @userplot ArrowPlot
 @recipe function f(data::ArrowPlot; arrow_color_palette=nothing)
     coords = data.args[1]
-
     for (ind, coord) in enumerate(coords)
         color_here = isnothing(arrow_color_palette) ? :grey : arrow_color_palette[ind]
         for v in coord
@@ -35,16 +34,23 @@ function logoplot_with_arrow_gaps(pfms,
     given_num_cols::Int=15,
     arrow_shape_scale_ratio::Real=0.7,
     height_top::Real=1.7
-    ) where T<:Real
+    )
 
     @assert length(pfms)-1 == size(ds_mats, 2) "The number of columns in ds_mats should be equal to the length of pfms - 1"
     @assert length(weights) == size(ds_mats, 1) "The number of rows in ds_mats should be equal to the length of weights"
     
+    # sort 
+    inds_sorted = sortperm(weights)
+    weights_sorted = weights[inds_sorted]
+    ds_mats_sorted = @view ds_mats[inds_sorted, :]
+
+    # obtain the (organized) arrow shapes
     coords_mat, pfm_starts, total_pfm_cols, total_d_cols = 
-        make_arrow_shapes(ds_mats, weights, given_num_cols, pfms;
+        make_arrow_shapes(ds_mats_sorted, weights_sorted, given_num_cols, pfms;
         arrow_shape_scale_ratio=arrow_shape_scale_ratio, height_top=height_top)
 
-    p = nothinglogo(total_pfm_cols + total_d_cols);    
+    # plot the logo with arrow shapes
+    p = nothinglogo(total_pfm_cols + total_d_cols; xaxis_on=false);    
         
     for (ind, pfm) in enumerate(pfms)
         logo_x_offset = pfm_starts[ind]
