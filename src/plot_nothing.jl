@@ -1,4 +1,3 @@
-
 @userplot NothingLogo
 @recipe function f(data::NothingLogo; 
                    xaxis=false,
