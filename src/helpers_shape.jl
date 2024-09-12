@@ -17,9 +17,10 @@ function get_arrow_basic(;line_scale=1.0, right=true, x_offset=0.0)
     arrow_line_width = line_scale * 4.0
     x = [0.0, arrow_line_width, arrow_line_width, line_scale * 7.5, arrow_line_width, arrow_line_width, 0.0] .+ x_offset
     y = [1.05, 1.05, 1.15, 1.0, 0.85, 0.95, 0.95 ]
-    if right shape(x,y)
+    if right 
+        return shape(x,y)
     else
-        shape(-x, y)
+        return shape(-x, y)
     end
 end
 

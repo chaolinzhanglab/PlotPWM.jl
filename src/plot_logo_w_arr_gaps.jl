@@ -1,12 +1,14 @@
 
 @userplot ArrowPlot
-@recipe function f(data::ArrowPlot)
+@recipe function f(data::ArrowPlot; arrow_color_palette=nothing)
     coords = data.args[1]
-    color --> :grey
-    for coord in coords
+
+    for (ind, coord) in enumerate(coords)
+        color_here = isnothing(arrow_color_palette) ? :grey : arrow_color_palette[ind]
         for v in coord
             @series begin
                 fill := 0
+                color --> color_here
                 lw --> 0
                 # label --> k
                 v.x, v.y
@@ -52,8 +54,8 @@ function logoplot_with_arrow_gaps(pfms,
                     logo_x_offset=logo_x_offset)
     end
 
-    for col in eachcol(coords_mat)
-        arrowplot!(p, col)
+    for (ind, col) in enumerate(eachcol(coords_mat))
+        arrowplot!(p, col; arrow_color_palette=arrow_color_palette)
     end
     return p
 end
