@@ -2,22 +2,6 @@ using Plots
 using PlotPWM
 
 
-pfm1 =  [0.02  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
-         0.98  0.0  0.02  0.19  0.0   0.96  0.01  0.89  0.03  0.0
-         0.0   0.0  0.0   0.77  0.01  0.0   0.0   0.0   0.56  0.0
-         0.0   0.0  0.0   0.04  0.99  0.04  0.01  0.11  0.23  0.0]
-
-pfm2 =  [0.02  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
-         0.98  0.0  0.02  0.19  0.0   0.96  0.01  0.89  0.03  0.0
-         0.0   0.0  0.0   0.77  0.01  0.0   0.0   0.0   0.56  0.0
-         0.0   0.0  0.0   0.04  0.99  0.04  0.01  0.11  0.23  0.0]
-
-pfm3 =  [0.02  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
-         0.98  0.0  0.02  0.19  0.0   0.96  0.01  0.89  0.03  0.0
-         0.0   0.0  0.0   0.77  0.01  0.0   0.0   0.0   0.56  0.0
-         0.0   0.0  0.0   0.04  0.99  0.04  0.01  0.11  0.23  0.0]
-
-pfms = [pfm1, pfm2, pfm3]
 
 
 
@@ -110,57 +94,6 @@ coords = make_in_between_basic(11; arrow_line_scale=1.25)
 
 ######################################
 
-function get_height_increments(scaled_heights)
-    vcat(reverse(cumsum(reverse(scaled_heights)))[2:end], 0)
-end
-
-function get_center_point_x(vec_shape::Vector{shape})
-    right_most_pt = get_right_most_point(vec_shape)
-    left_most_pt = get_left_most_point(vec_shape)
-    return (right_most_pt + left_most_pt) / 2
-end
-
-function get_center_point_y(vec_shape::Vector{shape})
-    top_most_pt = get_top_most_point(vec_shape)
-    bottom_most_pt = get_bottom_most_point(vec_shape)
-    return (top_most_pt + bottom_most_pt) / 2
-end
-
-#=
-num_col_each_col!(coords_mat::Matrix{Vector{shape}}, given_len)
-    coords_mat: Matrix of arrow-shapes
-    given_len: the total length given for all the columns of arrow-shapes
-Note that this function does the following: 
-    1. scale the width of each arrow-shapes
-    2. returns the number of columns for each "column"
-=#
-function num_col_each_col!(coords_mat::Matrix{Vector{shape}}, given_len)
-    widths = get_width.(coords_mat)
-    # get the maximum length of each column (set of arrow-shapes)
-    max_widths_each_col = maximum(widths, dims=1)
-    each_col_ratio = max_widths_each_col ./ sum(max_widths_each_col)
-    num_cols_each = Int.(ceil.(given_len .* each_col_ratio))
-
-    adjusted_lengths = num_cols_each .* (widths ./ max_widths_each_col)
-    scale_width!.(coords_mat, adjusted_lengths)
-    return num_cols_each
-end
-
-function obtain_pfm_regions_and_dstarts(pfms, num_cols_each; d_ϵ = 0.5)
-    pfm_num_cols_each = size.(pfms,2)
-    pfm_starts = Int[]
-    d_starts = Int[]
-    offset = 0
-    for (ind, p_col) in enumerate(pfm_num_cols_each)
-        push!(pfm_starts, offset)
-        offset += p_col
-        if ind ≤ length(num_cols_each)
-            push!(d_starts, offset)
-            offset += num_cols_each[ind]
-        end
-    end
-    return pfm_starts, d_starts .+ d_ϵ
-end
 
 
 
@@ -215,6 +148,36 @@ function make_arrow_shapes(ds_mats, weights, dist_cols::Int, pfms;
     total_d_cols = num_cols_each |> sum
     return coords_mat, pfm_starts, total_pfm_cols, total_d_cols
 end
+
+
+
+using PlotPWM
+
+
+pfm1 =  [0.02  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
+         0.98  0.0  0.02  0.19  0.0   0.96  0.01  0.89  0.03  0.0
+         0.0   0.0  0.0   0.77  0.01  0.0   0.0   0.0   0.56  0.0
+         0.0   0.0  0.0   0.04  0.99  0.04  0.01  0.11  0.23  0.0]
+
+pfm2 =  [0.02  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
+         0.98  0.0  0.02  0.19  0.0   0.96  0.01  0.89  0.03  0.0
+         0.0   0.0  0.0   0.77  0.01  0.0   0.0   0.0   0.56  0.0
+         0.0   0.0  0.0   0.04  0.99  0.04  0.01  0.11  0.23  0.0]
+
+pfm3 =  [0.02  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
+         0.98  0.0  0.02  0.19  0.0   0.96  0.01  0.89  0.03  0.0
+         0.0   0.0  0.0   0.77  0.01  0.0   0.0   0.0   0.56  0.0
+         0.0   0.0  0.0   0.04  0.99  0.04  0.01  0.11  0.23  0.0]
+
+pfms = [pfm1, pfm2, pfm3]
+
+ds_mats = Float64.([12 6; 32 6; 35 14; 356 4])
+weights = [0.3, 0.2, 0.3, 0.2]
+
+p = logoplot_with_arrow_gaps(pfms, ds_mats, weights)
+
+
+
 
 
 ds_mats = [12 6; 32 6; 35 14]

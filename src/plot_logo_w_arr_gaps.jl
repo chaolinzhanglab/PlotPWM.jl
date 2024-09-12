@@ -28,8 +28,8 @@ optional parameters:
     height_top: the maximum height of the arrow-shapes
 """
 function logoplot_with_arrow_gaps(pfms, 
-    ds_mats::Matrix{T},
-    weights::Vector{T};
+    ds_mats::AbstractMatrix,
+    weights::AbstractVector;
     given_num_cols::Int=15,
     arrow_shape_scale_ratio::Real=0.7,
     height_top::Real=1.7
