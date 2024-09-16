@@ -33,7 +33,8 @@ function logoplot_with_arrow_gaps(pfms,
     weights::AbstractVector;
     given_num_cols::Int=15,
     arrow_shape_scale_ratio::Real=0.7,
-    height_top::Real=1.7
+    height_top::Real=1.7,
+    uniform_color=true,
     )
 
     @assert length(pfms)-1 == size(ds_mats, 2) "The number of columns in ds_mats should be equal to the length of pfms - 1"
@@ -57,7 +58,8 @@ function logoplot_with_arrow_gaps(pfms,
         logoplot!(p, pfm, PlotPWM.bg; 
                     dpi=65,
                     setup_off=true, 
-                    logo_x_offset=logo_x_offset)
+                    logo_x_offset=logo_x_offset,
+                    uniform_color=uniform_color)
     end
 
     for (ind, col) in enumerate(eachcol(coords_mat))

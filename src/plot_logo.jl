@@ -46,12 +46,13 @@ end
                    setup_off=false,
                    alpha=1.0,
                    beta=1.0,
-                   dpi=65
+                   dpi=65,
+                   uniform_color=false
                    )
     if !setup_off
         num_cols = size(data.args[1], 2)
-        @info "num_cols: $num_cols"
         xticks --> 1:1:num_cols # xticks needs to be placed here to avoid fractional xticks? weird
+        @info "num_cols: $num_cols"
         ylims --> (0, ylim_max)
         xlims --> (xlim_min, num_cols+1)
         logo_size = (_width_factor_(num_cols)*num_cols, logo_height)
@@ -69,12 +70,12 @@ end
         legend --> false
         tickdir --> :out
         grid --> false
-        dtick--> 10
         margin --> margin
         thickness_scaling --> thickness_scaling
         size --> logo_size
-        framestyle --> :zerolines
+        # framestyle --> :box
     end
+    xticks --> 1:1:size(data.args[1], 2) # xticks needs to be placed here to avoid fractional xticks? weird
     dpi --> dpi
     alpha --> alpha
     pfm = data.args[1]
@@ -84,11 +85,12 @@ end
                      logo_y_offset=logo_y_offset);
     # @info "coords: $(typeof(coords[1]))"
     for (k, v) in coords
+        color_here = uniform_color ? "#4664CB" : get(AA_PALETTE3, k, :grey)
         @series begin
             fill := 0
             lw --> 0
             label --> k
-            color --> get(AA_PALETTE3, k, :grey)
+            color --> color_here
             v.xs, v.ys
         end
     end
