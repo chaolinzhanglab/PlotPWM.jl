@@ -23,7 +23,8 @@ PlotPWM is a package for plotting [position weight matrices (PWMs)](https://en.w
 # Installation
 To install PlotPWM use Julia's package manager:
 ```
-pkg> add PlotPWM
+using Pkg
+Pkg.add("PlotPWM")
 ```
 
 # Usage
