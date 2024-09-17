@@ -59,7 +59,6 @@ The `background` is an array representing the background probabilities for A, C,
 You can also call:
 ```
 logoplot(pfm)
-logoplot(pfm; uniform_color=true)
 ```
 to get the same results as above, where the background is set to `[0.25, 0.25, 0.25, 0.25]` by default.
 
