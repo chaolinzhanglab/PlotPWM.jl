@@ -221,3 +221,4 @@ end
 function save_logoplot(pfm, save_name::String; dpi=default_dpi, highlighted_regions=nothing)
     save_logoplot(pfm, default_genomic_background, save_name; dpi=dpi, highlighted_regions=highlighted_regions)
 end
+

@@ -35,6 +35,7 @@ function logoplot_with_arrow_gaps(pfms,
     arrow_shape_scale_ratio::Real=0.7,
     height_top::Real=1.7,
     uniform_color=true,
+    dpi=65
     )
 
     @assert length(pfms)-1 == size(ds_mats, 2) "The number of columns in ds_mats should be equal to the length of pfms - 1"
@@ -56,14 +57,29 @@ function logoplot_with_arrow_gaps(pfms,
     for (ind, pfm) in enumerate(pfms)
         logo_x_offset = pfm_starts[ind]
         logoplot!(p, pfm, PlotPWM.bg; 
-                    dpi=65,
+                    dpi=dpi,
                     setup_off=true, 
                     logo_x_offset=logo_x_offset,
                     uniform_color=uniform_color)
     end
 
-    for (ind, col) in enumerate(eachcol(coords_mat))
+    for (_, col) in enumerate(eachcol(coords_mat))
         arrowplot!(p, col; arrow_color_palette=arrow_color_palette)
     end
     return p
+end
+
+
+function save_logo_w_arrows(pfms, 
+                            ds_mats::AbstractMatrix, 
+                            weights::AbstractVector, 
+                            save_name::String; 
+                            dpi=default_dpi
+    )
+    @assert sum(weights) ≈ 1 "The sum of weights should be 1"
+    for pfm in pfms
+        @assert all(sum(pfm, dims=1) .≈ 1) "pfm must be a probability matrix"
+    end
+    p = logoplot_with_arrow_gaps(pfms, ds_mats, weights; dpi=dpi)
+    savefig(p, save_name)
 end

@@ -178,9 +178,20 @@ ds_mats = [12 6; 32 6; 235 14]
 weights = [0.5, 0.2, 0.3]
 
 using Plots
+
+
 p = logoplot_with_arrow_gaps(pfms, ds_mats, weights)
 
 savefig(p, "test.png")
+
+save_logo_w_arrows(pfms, ds_mats, weights, "test.png")
+
+
+pfms = [pfm1, pfm2]
+ds_mats = zeros(1,1)
+ds_mats[1,1] = 12
+weights = [1.0]
+p = logoplot_with_arrow_gaps(pfms, ds_mats, weights)
 
 
 

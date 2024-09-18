@@ -18,6 +18,7 @@ export LogoPlot,
        save_logoplot, 
        save_crosslinked_logoplot,
        logoplot_with_arrow_gaps,
+       save_logo_w_arrows,
        NothingLogo
 
 
