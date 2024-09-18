@@ -51,10 +51,9 @@ end
                    )
     if !setup_off
         num_cols = size(data.args[1], 2)
-        xticks --> 1:1:num_cols # xticks needs to be placed here to avoid fractional xticks? weird
         @info "num_cols: $num_cols"
         ylims --> (0, ylim_max)
-        xlims --> (xlim_min, num_cols+1)
+        xlims --> (xlim_min, num_cols+2)
         logo_size = (_width_factor_(num_cols)*num_cols, logo_height)
         ticks --> :native
         yticks --> yticks  # Ensure ticks are generated
@@ -75,7 +74,6 @@ end
         size --> logo_size
         # framestyle --> :box
     end
-    xticks --> 1:1:size(data.args[1], 2) # xticks needs to be placed here to avoid fractional xticks? weird
     dpi --> dpi
     alpha --> alpha
     pfm = data.args[1]
@@ -94,6 +92,7 @@ end
             v.xs, v.ys
         end
     end
+    xticks --> 1:1:size(data.args[1], 2) # xticks needs to be placed here to avoid fractional xticks? weird
 end
 
 # check if there's any overlap in the highlighted region
@@ -106,9 +105,11 @@ function chk_overlap(highlighted_regions::Vector{UnitRange{Int}})
     return false
 end
 
-
 function check_highlighted_regions(highlighted_regions::Vector{UnitRange{Int}}) 
     if length(highlighted_regions) > 1
+        # if chk_overlap(highlighted_regions)
+        #     @info "highlighted regions: $highlighted_regions"
+        # end
         @assert !chk_overlap(highlighted_regions) "highlighted_regions shouldn't be overlapping"
     end
 end

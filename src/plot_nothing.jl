@@ -37,4 +37,5 @@
         framestyle --> :none
         dpi --> dpi
     end
+    xticks --> 1:1:data.args[1]
 end
