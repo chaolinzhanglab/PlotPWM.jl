@@ -44,7 +44,7 @@ pfm =  [0.02  1.0  0.98  0.0   0.0   0.0   0.98  0.0   0.18  1.0
 
 background = [0.25, 0.25, 0.25, 0.25]
 
-logoplot(pfm[:,1:9], background)
+logoplot(pfm, background)
 ```
 will give
 
