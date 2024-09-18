@@ -225,7 +225,7 @@ end
 
 function make_arrow_shapes(ds_mats, weights, dist_cols::Int, pfms; 
     arrow_shape_scale_ratio=0.8, height_top=2.0)
-    coords_mat = map(x->make_in_between_basic(x; arrow_line_scale=0.25*log(x)), ds_mats)
+    coords_mat = map(x->make_in_between_basic(x; arrow_line_scale=0.25*log(max(x,1))), ds_mats)
     # scale the width of each arrow-shapes and 
     # get the number of columns for each "column"
     num_cols_each = num_col_each_col!(coords_mat, dist_cols)
