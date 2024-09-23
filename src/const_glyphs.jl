@@ -5,7 +5,7 @@ const dna_letters = ["A", "C", "G", "T"]
 rectangle(x, y, w, h) = (; x = (x .+ [0, w, w, 0]), y = (y .+ [0, 0, h, h]))
 
 const BASIC_RECT = rectangle(0.2, 0.0, 0.6, 1.0)
-const C_RECT = rectangle(0.2, 0.0, 0.1, 1.0)
+const C_RECT = rectangle(0.15, 0.0, 0.2, 1.0)
 
 
 # stolen from https://github.com/heike/gglogo/blob/master/data/alphabet.rda + added "*" char

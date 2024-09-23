@@ -118,7 +118,7 @@ C2 = [0.01  0.01  0.03  0.0   0.37  0.03  0.02  0.03  0.01  0.0
 ```
 Now, using
 ```
-logoplotwithcrosslink(pfm, background, C; rna=true)
+logoplotwithcrosslink(pfm, background, C2; rna=true)
 ```
 You'd get 
 

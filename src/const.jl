@@ -15,7 +15,7 @@ const logo_height = 220
 # logo yticks
 const yticks = 0:1:2
 const yminorticks = 25
-const ytickfontsize = 265
+const ytickfontsize = 185
 # logo xticks
 const xtickfontsize = 145
 # logo font settings

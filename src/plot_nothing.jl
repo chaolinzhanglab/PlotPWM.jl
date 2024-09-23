@@ -34,7 +34,7 @@
         margin --> margin
         thickness_scaling --> thickness_scaling
         size --> logo_size
-        framestyle --> :none
+        # framestyle --> :none
         dpi --> dpi
     end
     xticks --> 1:1:data.args[1]
