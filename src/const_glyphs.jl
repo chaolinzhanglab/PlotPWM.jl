@@ -137,9 +137,9 @@ const AA_PALETTE_negative = Dict(
     "" => "#158DC4",
 )
 
-arrow_color_palette = [
-    "#3E359C",
+const arrow_color_palette = [
     "#EC771B",
+    "#3E359C",
     "#12802E",
     "#6C73C2",
     "#833D73",
