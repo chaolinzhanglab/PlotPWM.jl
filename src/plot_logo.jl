@@ -73,7 +73,6 @@ end
         thickness_scaling --> thickness_scaling
         size --> logo_size
         # framestyle --> :box
-        xticks --> 1:1:size(data.args[1], 2) # xticks needs to be placed here to avoid fractional xticks? weird
     end
     dpi --> dpi
     alpha --> alpha
@@ -92,6 +91,9 @@ end
             color --> color_here
             v.xs, v.ys
         end
+    end
+    if !setup_off
+        xticks --> 1:1:size(data.args[1], 2) # xticks needs to be placed here to avoid fractional xticks? weird
     end
 end
 
