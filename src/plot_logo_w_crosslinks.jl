@@ -31,24 +31,25 @@ function freq2xyWcrosslink(crosslink_mat;
 end
 
 @userplot LogoCrosslink
-@recipe function f(data::LogoCrosslink)
+@recipe function f(data::LogoCrosslink; alpha=1.0)
     crosslink_mat = data.args[1]
+    alpha --> alpha
     coords = freq2xyWcrosslink(crosslink_mat);
     for (k, v) in coords
         @series begin
             fill := 0
             lw --> 0
             label --> k
-            color --> get(AA_PALETTE3, k, :grey)
+            color --> get(crosslink_palette, k, :grey)
             v.xs, v.ys
         end
     end
 end
 
-function logoplotwithcrosslink(pfm, background, c; dpi=default_dpi, rna=true)
+function logoplotwithcrosslink(pfm, background, c; alpha=1.0, dpi=default_dpi, rna=true)
     p = nothinglogo(size(pfm, 2); crosslink=true)
-    logoplot!(p, pfm, background; dpi=dpi, setup_off=true, rna=rna)
-    logocrosslink!(p, c)
+    logoplot!(p, pfm, background; dpi=dpi, setup_off=true, rna=rna, alpha=alpha)
+    logocrosslink!(p, c; alpha=alpha)
     return p
 end
 
@@ -107,7 +108,7 @@ end
     save_crosslinked_logoplot(pfm, background, c, save_name; dpi=65, rna=true)
     Save a logoplot with crosslinks to a file
 """
-function save_crosslinked_logoplot(pfm, background, c, save_name; dpi=default_dpi, rna=true, highlighted_regions=nothing)    
+function save_crosslinked_logoplot(pfm, background, c, save_name; alpha=1.0, dpi=default_dpi, rna=true, highlighted_regions=nothing)    
     @assert all(sum(pfm, dims=1) .≈ 1) "pfm must be a probability matrix"
     @assert length(background) == 4 "background must be a vector of length 4"
     @assert all(0 .≤ background .≤ 1) "background must be a vector of probabilities"
@@ -117,13 +118,13 @@ function save_crosslinked_logoplot(pfm, background, c, save_name; dpi=default_dp
     sum_c = sum(c)
     @assert sum_c ≤ 1.01 "The sum of C must be less than or equal 1; right now it is $(sum_c)"
     if isnothing(highlighted_regions)
-        p = logoplotwithcrosslink(pfm, background, c; dpi=dpi, rna=rna)
+        p = logoplotwithcrosslink(pfm, background, c; dpi=dpi, rna=rna, alpha=alpha)
     else
         p = logoplot_with_highlight_crosslink(pfm, background, c, highlighted_regions; dpi=dpi)
     end
     savefig(p, save_name)
 end
 
-function save_crosslinked_logoplot(pfm, c, save_name; dpi=default_dpi, rna=true, highlighted_regions=nothing)
-    save_crosslinked_logoplot(pfm, default_genomic_background, c, save_name; dpi=dpi, rna=rna, highlighted_regions=highlighted_regions)
+function save_crosslinked_logoplot(pfm, c, save_name; alpha=alpha, dpi=default_dpi, rna=true, highlighted_regions=nothing)
+    save_crosslinked_logoplot(pfm, default_genomic_background, c, save_name; alpha=alpha, dpi=dpi, rna=rna, highlighted_regions=highlighted_regions)
 end

@@ -153,4 +153,15 @@ const arrow_color_palette = [
     # "833D73",
     # "C26b2F",
     # "4E290F"
-    # ]
+# ]
+
+const crosslink_palette = Dict(
+    "1" => "#EEB03C",
+    "2" => "#345DA2",
+    "3" => "#33FF00",
+    "4" => "#B10404",
+    "5" => "#125B9E",
+    "6" => "#FFFF99",
+    "7" => "#1AB2FF",
+    "8" => "#FF99BF"
+)
