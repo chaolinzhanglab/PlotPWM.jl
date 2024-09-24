@@ -73,6 +73,7 @@ end
         thickness_scaling --> thickness_scaling
         size --> logo_size
         # framestyle --> :box
+        xticks --> 1:1:size(data.args[1], 2) # xticks needs to be placed here to avoid fractional xticks? weird
     end
     dpi --> dpi
     alpha --> alpha
@@ -92,7 +93,6 @@ end
             v.xs, v.ys
         end
     end
-    xticks --> 1:1:size(data.args[1], 2) # xticks needs to be placed here to avoid fractional xticks? weird
 end
 
 # check if there's any overlap in the highlighted region
