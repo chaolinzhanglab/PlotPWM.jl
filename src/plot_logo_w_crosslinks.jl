@@ -125,6 +125,6 @@ function save_crosslinked_logoplot(pfm, background, c, save_name; alpha=1.0, dpi
     savefig(p, save_name)
 end
 
-function save_crosslinked_logoplot(pfm, c, save_name; alpha=alpha, dpi=default_dpi, rna=true, highlighted_regions=nothing)
+function save_crosslinked_logoplot(pfm, c, save_name; alpha=1.0, dpi=default_dpi, rna=true, highlighted_regions=nothing)
     save_crosslinked_logoplot(pfm, default_genomic_background, c, save_name; alpha=alpha, dpi=dpi, rna=rna, highlighted_regions=highlighted_regions)
 end
