@@ -23,7 +23,7 @@ const logo_font = "Helvetica"
 const logo_font_size = 45
 
 # default resolution for the logo
-const default_dpi = 65
+const default_dpi = 80
 
 # default thickness_scaling
 const thickness_scaling = 0.0525
