@@ -128,6 +128,7 @@ function logoplot_with_highlight(
         pfm::AbstractMatrix, 
         background::AbstractVector, 
         highlighted_regions::Vector{UnitRange{Int}};
+        rna=false,
         dpi=65,
         alpha = _alpha_
     )
@@ -142,6 +143,7 @@ function logoplot_with_highlight(
         logo_x_offset = r.start-1
         logoplot!(p, 
                   (@view pfm[:, r]), background; 
+                  rna=rna,
                   alpha=alpha,
                   dpi=dpi,
                   setup_off=true, 
@@ -150,6 +152,7 @@ function logoplot_with_highlight(
     for r in highlighted_regions
         logo_x_offset = r.start-1
         logoplot!(p, (@view pfm[:, r]), background; 
+                     rna=rna,
                      dpi=dpi,
                      setup_off=true, 
                      logo_x_offset=logo_x_offset)
@@ -159,7 +162,7 @@ end
 
 function logoplot_with_highlight(
         pfm::AbstractMatrix, 
-        highlighted_regions::Vector{UnitRange{Int}})
+        highlighted_regions::Vector{UnitRange{Int}}; rna=false)
     return logoplot_with_highlight(pfm, 
                                    default_genomic_background, 
                                    highlighted_regions)
@@ -199,15 +202,15 @@ save_logoplot(pfm, background, "logo.png"; dpi=65)
 
 ```
 """
-function save_logoplot(pfm, background, save_name::String; alpha=1.0, dpi=default_dpi, highlighted_regions=nothing)
+function save_logoplot(pfm, background, save_name::String; alpha=1.0, rna=false, dpi=default_dpi, highlighted_regions=nothing)
     @assert all(sum(pfm, dims=1) .≈ 1) "pfm must be a probability matrix"
     @assert length(background) == 4 "background must be a vector of length 4"
     @assert all(0 .≤ background .≤ 1) "background must be a vector of probabilities"
     @assert sum(background) ≈ 1 "background must sum to 1"
     if isnothing(highlighted_regions)
-        p = logoplot(pfm, background; alpha=alpha, dpi=dpi, highlighted_regions=highlighted_regions)
+        p = logoplot(pfm, background; rna=rna, alpha=alpha, dpi=dpi, highlighted_regions=highlighted_regions)
     else
-        p = logoplot_with_highlight(pfm, background, highlighted_regions; dpi=dpi)
+        p = logoplot_with_highlight(pfm, background, highlighted_regions; dpi=dpi, rna=rna)
     end
     savefig(p, save_name)
 end
@@ -220,7 +223,7 @@ end
 
     See `save_logoplot(pfm, background, save_name; dpi=65)` for more details.
 """
-function save_logoplot(pfm, save_name::String; alpha=1.0, dpi=default_dpi, highlighted_regions=nothing)
-    save_logoplot(pfm, default_genomic_background, save_name; alpha=alpha, dpi=dpi, highlighted_regions=highlighted_regions)
+function save_logoplot(pfm, save_name::String; rna=false, alpha=1.0, dpi=default_dpi, highlighted_regions=nothing)
+    save_logoplot(pfm, default_genomic_background, save_name; rna=rna, alpha=alpha, dpi=dpi, highlighted_regions=highlighted_regions)
 end
 
