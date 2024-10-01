@@ -71,7 +71,6 @@ function logoplot_with_arrow_gaps(pfms,
     return p
 end
 
-
 function save_logo_w_arrows(pfms, 
                             ds_mats::AbstractMatrix, 
                             weights::AbstractVector, 
