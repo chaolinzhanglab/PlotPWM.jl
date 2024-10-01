@@ -4,7 +4,7 @@ const _alpha_ = 0.35
 const default_genomic_background = [0.25 for _ = 1:4]
 const bg = default_genomic_background
 # The maximum length of the crosslinking tendencies
-const crosslink_stretch_factor = 2.0
+const crosslink_stretch_factor = 6.0
 
 # maximum height of the logo
 const ylim_max = 2

@@ -12,7 +12,7 @@ function crosslink!(crosslink_mat, all_coords, logo_x_offset, logo_y_offset)
                 # @info "esh1: $(esh[1]), esh2: $(esh[2])"
                 push!(ys, (esh[r] .* charglyph.y .- (total_height - yoffset) .+ logo_y_offset)...)
                 push!(ys, NaN)
-                push!(xs, ((1.2 .* charglyph.x .+ xoffset .- 0.275)...))
+                push!(xs, ((1.1 .* charglyph.x .+ xoffset .- 0.275)...))
                 push!(xs, NaN)
                 push!(all_coords, ("$r", (;xs, ys)))
             end
