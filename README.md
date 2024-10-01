@@ -142,7 +142,6 @@ save_crosslinked_logoplot(pfm, background, C2, "demo3.png"; rna=true)
 to save the plot.
 
 
-
 ## Plot your PWM with highlighted regions
 Sometimes you may have columns that you want to highlight, for example, when you have transcription factors binding sites embedded in a (long) transposable element (e.g. see figure 4 in this [paper](https://academic.oup.com/bioinformatics/article/39/6/btad378/7192989)). Then, what you can do is to provide a vector of `UnitRange{Int}` to highlight the regions of interest, e.g. 
 ```
@@ -165,7 +164,6 @@ logoplot_with_highlight_crosslink(pfm, background, C2, highlighted_regions2)
 ![highlight-pfm](demo/demo5.png)
 
 Use 
-
 
 <!-- 
 save_crosslinked_logoplot(pfm, C2, "tmp.png"; highlighted_regions=highlighted_regions2)-->
