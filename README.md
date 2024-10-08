@@ -62,6 +62,14 @@ logoplot(pfm)
 ```
 to get the same results as above, where the background is set to `[0.25, 0.25, 0.25, 0.25]` by default.
 
+Use
+```
+logoplot(pfm; _margin_=0Plots.mm, tight=true)
+```
+to take out the x and y -axis in the PWM plot, which gives 
+
+![pfm](demo/no_margin.png)
+
 ### Save the PWMs
 To save your plot, use `save_logoplot(pfm, background, save_name)`. For example:
 ```
