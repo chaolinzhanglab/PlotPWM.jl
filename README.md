@@ -64,7 +64,7 @@ to get the same results as above, where the background is set to `[0.25, 0.25, 0
 
 Use
 ```
-logoplot(pfm; _margin_=0Plots.mm, tight=true)
+logoplot(pfm; _margin_=0Plots.mm, tight=true, yaxis=false, xaxis=false)
 ```
 to take out the x and y -axis in the PWM plot, which gives 
 

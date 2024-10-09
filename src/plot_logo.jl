@@ -52,7 +52,7 @@ end
                    tight=false
                    )
     
-    if !setup_off        
+    if !setup_off
         num_cols = size(data.args[1], 2)
         xlim_here = !tight ? (xlim_min, num_cols+2) : (0.5, num_cols+0.5)
         @info "num_cols: $num_cols"
