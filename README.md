@@ -116,7 +116,8 @@ which will automatically assume a uniform background of `[0.25, 0.25, 0.25, 0.25
 
 Use the command
 ```
-save_crosslinked_logoplot(pfm, background, C, "demo2.png")
+save_crosslinked_logoplot(pfm, background, C, "demo1.png")
+save_crosslinked_logoplot(pfm, background, C2, "demo2.png")
 ```
 or 
 ```

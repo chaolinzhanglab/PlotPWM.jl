@@ -4,7 +4,7 @@ function crosslink!(crosslink_mat, all_coords, logo_x_offset, logo_y_offset)
         num_rows = size(crosslink_mat,1)
         for (xoffset, col) in enumerate(eachcol(crosslink_mat))            
             vsp = 1e-8 .* rand(length(col)) # vsp: very small perturb
-            esh = col .* crosslink_stretch_factor .+ vsp # esh: each signiture height
+            esh = col .* crosslink_stretch_factor2 .+ vsp # esh: each signiture height
             total_height = sum(esh)
             for r = 1:num_rows
                 xs, ys = Float64[], Float64[]
