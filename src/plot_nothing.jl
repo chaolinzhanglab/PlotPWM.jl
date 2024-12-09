@@ -8,12 +8,17 @@
                    beta=1.0,
                    dpi=65,
                    crosslink=false,
-                   xaxis_on=true,
+                   xaxis_on=true
                    )
 
-    logo_size_height = crosslink ? logo_height + 100 : logo_height;
+    logo_size_height = crosslink ? logo_height + 35 : logo_height;
+    xaxis    = xaxis_on;
+    xaxis    = crosslink ? false : true;
+    yaxis    = crosslink ? false : true;
+    _margin_ = crosslink ? 25Plots.mm : margin;
     if !setup_off
-        xaxis --> xaxis_on
+        xaxis --> xaxis
+        yaxis --> yaxis
         num_cols = data.args[1]
         ylims --> (crosslink ? -crosslink_stretch_factor2 : 0, ylim_max)
         xlims --> (xlim_min, num_cols+1)
@@ -33,7 +38,7 @@
         legend --> false
         tickdir --> :out
         grid --> false
-        margin --> margin
+        margin --> _margin_
         thickness_scaling --> thickness_scaling
         size --> logo_size
         # framestyle --> :none
