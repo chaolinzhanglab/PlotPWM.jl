@@ -11,7 +11,7 @@
                    xaxis_on=true
                    )
 
-    logo_size_height = crosslink ? logo_height + 35 : logo_height;
+    logo_size_height = crosslink ? logo_height + 75 : logo_height;
     xaxis    = xaxis_on;
     xaxis    = crosslink ? false : true;
     yaxis    = crosslink ? false : true;

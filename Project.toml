@@ -5,9 +5,13 @@ version = "1.0.5"
 
 [deps]
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
+StyledStrings = "f489334b-da3d-4c2e-b8f0-e476e12c162b"
 
 [compat]
 Plots = "1.40.5"
+Revise = "3.6.4"
+StyledStrings = "1.11.0"
 julia = "1.10.4"
 
 [extras]
