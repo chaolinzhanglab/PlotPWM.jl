@@ -11,7 +11,7 @@
                    xaxis_on=true
                    )
 
-    logo_size_height = crosslink ? logo_height + 75 : logo_height;
+    logo_size_height = crosslink ? logo_height + 115 : logo_height;
     xaxis    = xaxis_on;
     xaxis    = crosslink ? false : true;
     yaxis    = crosslink ? false : true;
@@ -22,7 +22,7 @@
         num_cols = data.args[1]
         ylims --> (crosslink ? -crosslink_stretch_factor2 : 0, ylim_max)
         xlims --> (xlim_min, num_cols+1)
-        logo_size = (_width_factor_(num_cols)*num_cols, logo_size_height)
+        logo_size = (_width_factor_(num_cols)*num_cols, logo_size_height) .* 2.5
         ticks --> :native
         yticks --> yticks  # Ensure ticks are generated
         ytickfontcolor --> :gray
