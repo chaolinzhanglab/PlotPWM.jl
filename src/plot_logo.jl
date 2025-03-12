@@ -46,10 +46,13 @@ end
                    setup_off=false,
                    alpha=1.0,
                    beta=1.0,
-                   dpi=65,
+                   dpi=125,
                    _margin_ = margin,
                    uniform_color=false,
-                   tight=false
+                   tight=false, 
+                   pos = false,
+                   color_positive = "#FFA500",
+                   color_negative = "#0047AB"
                    )
     
     if !setup_off
@@ -58,25 +61,33 @@ end
         # @info "num_cols: $num_cols"
         ylims --> (0, ylim_max)
         xlims --> xlim_here
-        logo_size = (_width_factor_(num_cols)*num_cols, logo_height)
+        # logo_size = (_width_factor_(num_cols)*num_cols, logo_height)
+        logo_size = 3 .* (_width_factor_(num_cols)*num_cols, logo_height)
         ticks --> :native
         yticks --> yticks  # Ensure ticks are generated
-        ytickfontcolor --> :gray
+        ytickfontcolor --> :black
         ytick_direction --> :out
-        ytickfontsize --> ytickfontsize
+
+        # framestyle --> :none
+        gridlinewidth --> 0.75
+        
         yminorticks --> yminorticks
         ytickfont --> font(logo_font_size, logo_font)
-        xtickfontcolor --> :gray
-        xtickfontsize --> xtickfontsize
+        xtickfontcolor --> :black
+        ytickfontsize --> ytickfontsize 
+        xtickfontsize --> xtickfontsize 
         xaxis && (xaxis --> xaxis)
         yaxis && (yaxis --> yaxis)
         legend --> false
         tickdir --> :out
         grid --> false
-        margin --> _margin_
-        thickness_scaling --> thickness_scaling
+        # margin --> _margin_
+        margin --> 125Plots.mm
+        # thickness_scaling --> thickness_scaling
+        thickness_scaling --> 0.2 
         size --> logo_size
-        # framestyle --> :box
+        # framestyle --> :semi
+        framestyle --> :zerolines
     end
     dpi --> dpi
     alpha --> alpha
@@ -86,8 +97,16 @@ end
                      logo_x_offset=logo_x_offset, 
                      logo_y_offset=logo_y_offset);
     # @info "coords: $(typeof(coords[1]))"
+    if uniform_color
+        if pos
+            palette = PALETTE_pos
+        else
+            palette = PALETTE_neg
+        end
+    end 
+
     for (k, v) in coords
-        color_here = uniform_color ? "#4664CB" : get(AA_PALETTE3, k, :grey)
+        color_here = uniform_color ? get(palette, k, :grey) : get(AA_PALETTE3, k, :grey)
         @series begin
             fill := 0
             lw --> 0
@@ -99,6 +118,10 @@ end
     if !setup_off
         xticks --> 1:1:size(data.args[1], 2) # xticks needs to be placed here to avoid fractional xticks? weird
     end
+    # xtickslabelcolor --> :white
+    xticks --> nothing,   # Remove x-ticks
+    xticklabels --> nothing  # Remove x-tick labels
+    
 end
 
 # check if there's any overlap in the highlighted region
@@ -134,7 +157,9 @@ function logoplot_with_highlight(
         highlighted_regions::Vector{UnitRange{Int}};
         rna=false,
         dpi=65,
-        alpha = _alpha_
+        alpha = _alpha_,
+        uniform_color=false,
+        pos = false,
     )
 
     check_highlighted_regions(highlighted_regions)
@@ -151,7 +176,9 @@ function logoplot_with_highlight(
                   alpha=alpha,
                   dpi=dpi,
                   setup_off=true, 
-                  logo_x_offset=logo_x_offset)
+                  logo_x_offset=logo_x_offset,
+                  uniform_color=uniform_color,
+                  pos=pos)
     end
     for r in highlighted_regions
         logo_x_offset = r.start-1
@@ -159,7 +186,10 @@ function logoplot_with_highlight(
                      rna=rna,
                      dpi=dpi,
                      setup_off=true, 
-                     logo_x_offset=logo_x_offset)
+                     logo_x_offset=logo_x_offset,
+                     uniform_color=uniform_color,
+                     pos=pos)
+
     end
     return p
 end
@@ -209,7 +239,7 @@ save_logoplot(pfm, background, "logo.png"; dpi=65)
 ```
 """
 function save_logoplot(pfm, background, save_name::String; 
-    alpha=1.0, rna=false, dpi=default_dpi, highlighted_regions=nothing,
+    alpha=1.0, rna=false, dpi=default_dpi, highlighted_regions=nothing, uniform_color=false, pos=false,
     _margin_=margin, tight=false)
     @assert all(sum(pfm, dims=1) .≈ 1) "pfm must be a probability matrix"
     @assert length(background) == 4 "background must be a vector of length 4"
@@ -219,10 +249,17 @@ function save_logoplot(pfm, background, save_name::String;
         p = logoplot(pfm, background; 
             rna=rna, alpha=alpha, dpi=dpi, 
             highlighted_regions=highlighted_regions,
-            _margin_=_margin_, tight=tight)
+            _margin_=_margin_, tight=tight,
+            uniform_color=uniform_color, pos=pos)
+        plot!(p, xaxis=false, ytickfontsize=185)
+        hline!([0], linewidth=25, color=:black)  # Add a thick horizontal line (x-axis)
+        vline!([0], linewidth=25, color=:black)  # Add a thick vertical line (y-axis)
     else
         p = logoplot_with_highlight(pfm, background, highlighted_regions; 
-            dpi=dpi, rna=rna)
+            dpi=dpi, rna=rna, uniform_color=uniform_color, pos=pos)
+        plot!(p, xaxis=false, ytickfontsize=395)
+        hline!(p, [0], linewidth=55, color=:black)  # Add a thick horizontal line (x-axis)
+        vline!(p, [0], linewidth=55, color=:black)  # Add a thick vertical line (y-axis)
     end
     savefig(p, save_name)
 end
@@ -236,10 +273,10 @@ end
     See `save_logoplot(pfm, background, save_name; dpi=65)` for more details.
 """
 function save_logoplot(pfm, save_name::String; 
-    rna=false, alpha=1.0, dpi=default_dpi, highlighted_regions=nothing,
+    rna=false, alpha=1.0, dpi=160, highlighted_regions=nothing, uniform_color=false, pos=false,
     _margin_=margin, tight=false)
     save_logoplot(pfm, default_genomic_background, save_name; 
         rna=rna, alpha=alpha, dpi=dpi, highlighted_regions=highlighted_regions,
-        _margin_=_margin_, tight=tight)
+        _margin_=_margin_, tight=tight,  uniform_color=uniform_color, pos=pos)
 end
 
